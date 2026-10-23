@@ -2,7 +2,7 @@
   "name": "catalogo-digital",
   "private": true,
   "scripts": {
-    "dev": "wrangler pages dev public --kv CATALOG --r2 FOTOS --binding ADMIN_PASSWORD=teste123 --port 8788",
+    "dev": "wrangler pages dev public --kv CATALOG --binding ADMIN_PASSWORD=teste123 --port 8788",
     "deploy": "wrangler pages deploy public"
   },
   "devDependencies": { "wrangler": "^3.114.0" }

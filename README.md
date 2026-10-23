@@ -13,7 +13,7 @@ e painel de edição protegido por senha. Hospedagem: **Cloudflare Pages** (plan
 | API: login, salvar catálogo, upload, servir fotos | `functions/api/[[path]].js` |
 | Gera as fotos com marca d'água | `scripts/watermark_seed.py` |
 
-Depois do primeiro "Salvar" no painel, o catálogo passa a viver no **KV** e as fotos novas no **R2**.
+Depois do primeiro "Salvar" no painel, o catálogo passa a viver no **KV** e as fotos novas também no **KV** (sem cartão de crédito). Se um dia quiser, ligue um bucket **R2** com o nome `FOTOS` e as fotos novas passam a ir para ele.
 O `seed/` só é usado enquanto o KV estiver vazio.
 
 ## Publicar na Cloudflare (grátis)
@@ -22,11 +22,10 @@ O `seed/` só é usado enquanto o KV estiver vazio.
 2. Cloudflare → **Workers & Pages → Create → Pages → Connect to Git** e escolha o repositório.
    - Build command: *(vazio)*
    - Build output directory: `public`
-3. Crie os recursos: **Storage & Databases → KV → Create** (ex.: `catalogo-pioneira`) e **R2 → Create bucket**
-   (ex.: `catalogo-pioneira-fotos`).
+3. Crie o KV: **Storage & Databases → KV → Create** (ex.: `catalogo-pioneira`).
 4. No projeto Pages: **Settings → Bindings** → adicione
    - KV namespace, variável `CATALOG` → o KV criado
-   - R2 bucket, variável `FOTOS` → o bucket criado
+   - (opcional) R2 bucket, variável `FOTOS`. Exige cartão cadastrado; sem ele, as fotos ficam no KV
 5. **Settings → Variables and Secrets** → adicione como **Secret**:
    - `ADMIN_PASSWORD` → a senha compartilhada
    - `SESSION_SECRET` → um texto longo e aleatório (opcional, mas recomendado)
@@ -51,7 +50,7 @@ a "Área restrita". Aí você edita o JSON, adiciona as fotos (com `scripts/wate
 Faça uma cópia deste projeto (outro repositório ou pasta) e troque:
 - `public/seed/catalog.json`: dados da empresa, abas e produtos (ou edite tudo pelo painel);
 - `public/seed/*.jpg`: gere com `python3 -I scripts/watermark_seed.py <fotos> public/seed "@instagram_da_empresa"`;
-- crie outro projeto Pages, com **KV, R2 e senha próprios**.
+- crie outro projeto Pages, com **KV e senha próprios**.
 
 ## Sobre a proteção das fotos
 
@@ -62,5 +61,5 @@ Faça uma cópia deste projeto (outro repositório ou pasta) e troque:
 
 ## Limites conhecidos
 
-- Fotos substituídas ou removidas no painel continuam no R2 (ocupam espaço sem aparecer no site).
+- Fotos substituídas ou removidas no painel continuam guardadas (ocupam espaço sem aparecer no site). O KV grátis tem 1 GB, cerca de 2.000 fotos.
 - Cinco senhas erradas seguidas bloqueiam o IP por 15 minutos.

@@ -1,6 +1,6 @@
 // API do catálogo (Cloudflare Pages Functions).
-// Bindings esperados: CATALOG (KV), FOTOS (R2), ADMIN_PASSWORD (secret),
-// SESSION_SECRET (secret, opcional), ASSETS (automático).
+// Bindings esperados: CATALOG (KV), ADMIN_PASSWORD (secret), SESSION_SECRET (secret, opcional),
+// ASSETS (automático). FOTOS (R2) é opcional: sem ele, as fotos novas ficam no próprio KV.
 
 const SESSION_HOURS = 12;
 const MAX_CATALOG_BYTES = 300_000;
@@ -145,7 +145,8 @@ export async function onRequest({ request, env, params }) {
       const head = new Uint8Array(buf.slice(0, 3));
       if (!(head[0] === 0xff && head[1] === 0xd8 && head[2] === 0xff)) return json({ erro: "Envie JPEG." }, 400);
       const id = [...crypto.getRandomValues(new Uint8Array(12))].map((b) => b.toString(16).padStart(2, "0")).join("");
-      await env.FOTOS.put(`${id}.jpg`, buf, { httpMetadata: { contentType: "image/jpeg" } });
+      if (env.FOTOS) await env.FOTOS.put(`${id}.jpg`, buf, { httpMetadata: { contentType: "image/jpeg" } });
+      else await env.CATALOG.put(`img:${id}.jpg`, buf);
       return json({ url: `/api/img/${id}.jpg` });
     }
 
@@ -164,8 +165,8 @@ export async function onRequest({ request, env, params }) {
         const r = await env.ASSETS.fetch(new URL(`/seed/${name.slice(5)}`, url));
         return r.ok ? new Response(r.body, { headers }) : new Response("Not found", { status: 404 });
       }
-      const obj = await env.FOTOS.get(name);
-      return obj ? new Response(obj.body, { headers }) : new Response("Not found", { status: 404 });
+      const body = env.FOTOS ? (await env.FOTOS.get(name))?.body : await env.CATALOG.get(`img:${name}`, "arrayBuffer");
+      return body ? new Response(body, { headers }) : new Response("Not found", { status: 404 });
     }
 
     return json({ erro: "Rota não encontrada." }, 404);
