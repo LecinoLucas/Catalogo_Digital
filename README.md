@@ -16,6 +16,20 @@ e painel de edição protegido por senha. Hospedagem: **Cloudflare Pages** (plan
 Depois do primeiro "Salvar" no painel, o catálogo passa a viver no **KV** e as fotos novas também no **KV** (sem cartão de crédito). Se um dia quiser, ligue um bucket **R2** com o nome `FOTOS` e as fotos novas passam a ir para ele.
 O `seed/` só é usado enquanto o KV estiver vazio.
 
+## Visual (Tailwind)
+
+O visual usa Tailwind CSS v4, já compilado em `public/app.css` (arquivo que vai para o GitHub). Por isso a
+Cloudflare **não precisa de build**: deixe o *Build command* vazio e o *Output directory* como `public`.
+
+Só rode isto se mudar classes ou o tema (`src/input.css` ou o HTML):
+
+```
+npm install
+npm run css          # gera public/app.css
+```
+
+Depois faça o commit do `public/app.css` junto com a alteração.
+
 ## Publicar na Cloudflare (grátis)
 
 1. Suba este repositório para o GitHub.

@@ -1,0 +1,60 @@
+@import "tailwindcss";
+@source "../public/index.html";
+
+@font-face {
+  font-family: "Jakarta";
+  src: url("/fonts/plus-jakarta-sans-latin-wght-normal.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* A cor da marca vem do catálogo (empresa.cor) e define --brand em tempo de execução. */
+:root { --brand: #58bfec; }
+
+@theme inline {
+  --font-sans: "Jakarta", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --color-brand: var(--brand);
+  --color-brand-soft: color-mix(in srgb, var(--brand) 12%, white);
+  --color-brand-mid: color-mix(in srgb, var(--brand) 40%, white);
+  --color-brand-ink: color-mix(in srgb, var(--brand) 58%, #0b1220);
+  --color-ink: #0f1b2d;
+  --color-muted: #566176;
+  --color-line: #e5eaf1;
+  --color-paper: #f6f8fb;
+  --color-wa: #0e8545;
+  --color-wa-dark: #0b6e39;
+  --animate-sheet: sheet-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pop: pop-in 0.2s ease-out;
+  --animate-fade: fade-in 0.25s ease-out;
+}
+
+@keyframes sheet-in { from { transform: translateY(8%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes pop-in { from { transform: scale(0.96); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+@layer base {
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  :focus-visible { outline: 3px solid var(--color-brand-ink); outline-offset: 2px; }
+  body:has(dialog[open]) { overflow: hidden; }
+  dialog { color: inherit; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, ::before, ::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  /* Fotos protegidas: imagem como fundo + marca d'água sobreposta, sem <img> para salvar. */
+  .photo {
+    position: relative; overflow: hidden; background: #e6ecf3 center / cover no-repeat;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+  }
+  .photo::after {
+    content: ""; position: absolute; inset: 0; opacity: 0.3;
+    background-image: var(--marca-svg); background-size: 240px 240px;
+  }
+  @media print { .photo { display: none !important; } }
+  .no-scrollbar { scrollbar-width: none; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+}
