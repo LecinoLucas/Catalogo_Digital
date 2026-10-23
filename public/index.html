@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo</title>
+<meta name="description" content="Catálogo digital de produtos.">
+<style>
+:root{
+  --cor:#58bfec;
+  --cor-texto:color-mix(in srgb,var(--cor) 55%,#000);
+  --cor-suave:color-mix(in srgb,var(--cor) 14%,#fff);
+  --ink:#1a1a2e; --muted:#5f6675; --linha:#e6e9ef; --fundo:#fff; --fundo2:#f5f8fb;
+  --raio:16px; --sombra:0 6px 24px rgba(20,30,60,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--fundo);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--cor-texto);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* proteção das fotos */
+.photo{position:relative;background:#e9eef3 center/cover no-repeat;overflow:hidden;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.photo::after{content:"";position:absolute;inset:0;pointer-events:auto;opacity:.5;
+  background-image:var(--marca-svg);background-size:240px 240px}
+@media print{.photo{display:none!important}}
+
+/* topo */
+.topo{padding:18px 0 0}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.02em;color:var(--cor-texto)}
+.hero{display:grid;gap:28px;padding:28px 0 36px}
+.hero h1{font-size:clamp(34px,6vw,58px);line-height:1.04;margin:0 0 12px;letter-spacing:-.03em}
+.hero .sub{font-size:clamp(18px,2.4vw,22px);color:var(--cor-texto);margin:0 0 16px;font-weight:500}
+.hero p{color:var(--muted);margin:0 0 16px;max-width:52ch}
+.ticks{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:10px}
+.ticks li{display:flex;gap:10px;align-items:center;font-size:15px}
+.ticks li::before{content:"✓";flex:none;width:24px;height:24px;border-radius:50%;background:var(--cor);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+.destaque{background:var(--cor-suave);border-left:5px solid var(--cor);border-radius:10px;padding:14px 16px;font-weight:700;font-size:15px;margin:0 0 18px}
+.mosaico{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mosaico .photo{aspect-ratio:3/4;border-radius:12px}
+@media(min-width:860px){.hero{grid-template-columns:1fr 1fr;align-items:center}}
+
+/* abas */
+.abas-bar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--linha)}
+.abas{display:flex;gap:6px;overflow-x:auto;padding:10px 0;scrollbar-width:none}
+.abas::-webkit-scrollbar{display:none}
+.aba{flex:none;border:1px solid var(--linha);background:#fff;border-radius:999px;padding:9px 20px;font-weight:600;color:var(--muted);min-height:44px}
+.aba[aria-selected=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.aba small{opacity:.7;font-weight:500;margin-left:6px}
+
+/* grade */
+.grade{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));padding:26px 0 48px}
+.card{background:#fff;border:1px solid var(--linha);border-radius:var(--raio);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--sombra);transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.card .abrir{all:unset;cursor:pointer;display:block;flex:1}
+.card .abrir:focus-visible{outline:3px solid var(--cor-texto);outline-offset:-3px}
+.card .photo{aspect-ratio:4/5}
+.card .corpo{padding:14px 16px 16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--fundo2);color:var(--muted)}
+.chip:nth-child(2){background:var(--cor-suave);color:var(--cor-texto)}
+.titulo{font-weight:800;font-size:20px;line-height:1.15;margin:0;letter-spacing:-.01em}
+.titulo b{display:block;color:var(--cor-texto)}
+.card .medidas{margin:8px 0 0;color:var(--muted);font-size:14px}
+.vazio{grid-column:1/-1;text-align:center;padding:60px 16px;color:var(--muted);background:var(--fundo2);border-radius:var(--raio)}
+.vazio h2{margin:0 0 6px;color:var(--ink)}
+.adm-card{display:flex;gap:6px;padding:0 12px 12px}
+.btn{border:1px solid var(--linha);background:#fff;border-radius:10px;padding:8px 14px;font-weight:600;min-height:40px}
+.btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn.wa{background:#128c4a;color:#fff;border-color:#128c4a}
+.btn.perigo{color:#b3261e;border-color:#e8b4b0}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+/* rodapé */
+footer{background:var(--fundo2);border-top:1px solid var(--linha);padding:26px 0 90px;color:var(--muted);font-size:14px}
+footer .linha{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:space-between;align-items:center}
+footer a{color:var(--cor-texto);font-weight:600}
+.restrito{background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;padding:8px}
+
+/* diálogos */
+dialog{border:0;border-radius:20px;padding:0;max-width:min(960px,calc(100vw - 20px));width:100%;max-height:calc(100dvh - 20px);box-shadow:0 20px 70px rgba(0,0,0,.35);color:var(--ink);background:#fff}
+dialog::backdrop{background:rgba(10,15,30,.6)}
+dialog.peq{max-width:min(420px,calc(100vw - 20px))}
+.fechar{position:absolute;top:10px;right:10px;z-index:3;width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.92);font-size:22px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.det{display:grid}
+@media(min-width:760px){.det{grid-template-columns:5fr 6fr}}
+.galeria{display:flex;flex-direction:column;background:#e9eef3}
+.galeria .photo.grande{aspect-ratio:4/5;width:100%}
+@media(min-width:760px){.galeria .photo.grande{aspect-ratio:auto;flex:1;min-height:420px}}
+.thumbs{display:flex;gap:8px;padding:8px;overflow-x:auto}
+.thumbs button{all:unset;cursor:pointer;flex:none;border-radius:8px;outline-offset:2px}
+.thumbs button[aria-current=true]{outline:3px solid var(--cor)}
+.thumbs .photo{width:64px;height:64px;border-radius:8px}
+.info{padding:26px 22px;overflow-y:auto;max-height:calc(100dvh - 20px)}
+.info h2{font-size:clamp(26px,4vw,36px);line-height:1.08;margin:0 0 10px;letter-spacing:-.02em}
+.info h2 b{display:block;color:var(--cor-texto)}
+.info .desc{color:var(--muted);margin:0 0 18px}
+.dest{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-bottom:18px}
+.dest div{font-size:14px;color:var(--muted)}
+.dest strong{display:block;color:var(--ink);font-size:15px}
+@media(max-width:480px){.dest{grid-template-columns:1fr}}
+.specs{border:1px solid var(--linha);border-radius:14px;background:var(--fundo2);padding:6px 16px;margin-bottom:16px}
+.specs h3{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px}
+.specs dl{margin:0}
+.specs .r{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-top:1px solid var(--linha);font-size:14px}
+.specs .r:first-of-type{border-top:0}
+.specs dt{color:var(--muted)}
+.specs dd{margin:0;text-align:right;font-weight:700}
+.gar{display:flex;align-items:center;gap:12px;margin:0 0 18px}
+.gar .ic{width:34px;height:34px;border-radius:50%;background:var(--cor);color:#fff;display:grid;place-items:center;font-weight:800}
+.gar.ext .ic{background:#12915a}
+.gar small{display:block;color:var(--muted);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:11px}
+.gar strong{font-size:19px;color:var(--cor-texto)}
+.gar.ext strong{color:#0d7448}
+.etq{display:inline-block;background:var(--cor);color:#06222f;border-radius:12px;padding:8px 14px;margin-bottom:14px;font-size:14px}
+.etq strong{display:block}
+.acoes{display:flex;flex-wrap:wrap;gap:10px}
+
+/* admin */
+.adm-bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--ink);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.adm-bar span{font-weight:700;margin-right:6px}
+.adm-bar .btn{background:#2a2d4a;color:#fff;border-color:#3d4166}
+.form{padding:24px 20px;overflow-y:auto;max-height:calc(100dvh - 20px)}
+.form h2{margin:0 40px 14px 0}
+.form label{display:block;font-weight:600;font-size:14px;margin:12px 0 4px}
+.form input,.form select,.form textarea{width:100%;border:1px solid #cfd5df;border-radius:10px;padding:10px 12px;background:#fff;min-height:44px}
+.form textarea{min-height:80px;resize:vertical}
+.form input[type=color]{padding:2px;width:70px}
+.par{display:grid;grid-template-columns:1fr 1.4fr auto;gap:6px;margin-bottom:6px}
+.fotos-ed{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0}
+.fotos-ed .it{width:110px;border:1px solid var(--linha);border-radius:10px;overflow:hidden;background:#fff}
+.fotos-ed .photo{height:110px}
+.fotos-ed .ctl{display:flex;justify-content:space-between;padding:4px}
+.fotos-ed .ctl button{border:0;background:none;min-width:32px;min-height:32px;font-size:16px}
+.msg{min-height:22px;font-size:14px;margin:10px 0 0}
+.msg.erro{color:#b3261e}.msg.ok{color:#0d7448}
+.rodape-form{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-top:18px;position:sticky;bottom:-24px;background:#fff;padding:12px 0}
+.toast{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);background:#0d7448;color:#fff;padding:10px 18px;border-radius:999px;z-index:60;font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="topo wrap">
+  <div class="logo" id="logo"></div>
+  <section class="hero" aria-labelledby="hero-titulo">
+    <div>
+      <h1 id="hero-titulo"></h1>
+      <p class="sub" id="hero-sub"></p>
+      <p id="hero-desc"></p>
+      <ul class="ticks" id="hero-ticks"></ul>
+      <p class="destaque" id="hero-destaque" hidden></p>
+    </div>
+    <div class="mosaico" id="mosaico" aria-hidden="true"></div>
+  </section>
+</header>
+
+<div class="abas-bar"><div class="wrap"><div class="abas" id="abas" role="tablist" aria-label="Categorias"></div></div></div>
+<main class="wrap"><div class="grade" id="grade" role="tabpanel" aria-live="polite"></div></main>
+
+<footer>
+  <div class="wrap">
+    <div class="linha">
+      <span id="rodape"></span>
+      <span id="contato"></span>
+      <button class="restrito" id="btn-entrar" type="button">Área restrita</button>
+    </div>
+  </div>
+</footer>
+
+<dialog id="dlg-produto" aria-label="Detalhes do produto"></dialog>
+<dialog id="dlg-editor" aria-label="Editar"></dialog>
+<dialog id="dlg-login" class="peq" aria-label="Entrar">
+  <form class="form" id="form-login" method="dialog">
+    <button class="fechar" type="button" data-fechar aria-label="Fechar">×</button>
+    <h2>Área restrita</h2>
+    <label for="senha">Senha</label>
+    <input id="senha" type="password" autocomplete="current-password" required>
+    <p class="msg erro" id="login-msg" role="alert"></p>
+    <div class="rodape-form"><button class="btn pri" type="submit">Entrar</button></div>
+  </form>
+</dialog>
+<div id="adm-bar" class="adm-bar" hidden></div>
+
+<script>
+"use strict";
+/* ===== utilitários ===== */
+const $ = (s, r = document) => r.querySelector(s);
+function h(tag, props, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (k === "value") e.value = v;
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  const add = (c) => Array.isArray(c) ? c.forEach(add) : c != null && c !== false && e.append(c.nodeType ? c : document.createTextNode(c));
+  kids.forEach(add);
+  return e;
+}
+const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const clone = (o) => JSON.parse(JSON.stringify(o));
+async function api(path, opts = {}) {
+  const r = await fetch("/api/" + path, { credentials: "same-origin", ...opts });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.erro || "Erro " + r.status);
+  return data;
+}
+function toast(t) {
+  document.querySelectorAll(".toast").forEach((x) => x.remove());
+  const el = h("div", { class: "toast", role: "status" }, t);
+  document.body.append(el); setTimeout(() => el.remove(), 2500);
+}
+
+/* ===== estado ===== */
+let cat = null, admin = false, aba = null, estatico = false;
+
+/* ===== proteção de fotos ===== */
+function setMarcaSvg(texto) {
+  const t = String(texto || "").replace(/[<>&"']/g, "");
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><text x='120' y='125' fill='white' fill-opacity='0.35' font-family='Arial' font-weight='700' font-size='22' text-anchor='middle' transform='rotate(-28 120 120)'>${t}</text></svg>`;
+  document.documentElement.style.setProperty("--marca-svg", `url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
+}
+document.addEventListener("contextmenu", (e) => { if (e.target.closest(".photo")) e.preventDefault(); });
+document.addEventListener("dragstart", (e) => { if (e.target.closest(".photo")) e.preventDefault(); });
+
+const io = "IntersectionObserver" in window ? new IntersectionObserver((es) => {
+  es.forEach((en) => { if (en.isIntersecting) { en.target.style.backgroundImage = `url("${en.target.dataset.src}")`; io.unobserve(en.target); } });
+}, { rootMargin: "300px" }) : null;
+function photo(url, label, cls = "") {
+  const p = h("div", { class: "photo " + cls, role: "img", "aria-label": label || "Foto do produto", "data-src": url });
+  if (io) io.observe(p); else p.style.backgroundImage = `url("${url}")`;
+  return p;
+}
+
+/* marca d'água nos uploads (mesma do script do seed) */
+async function marcar(file, texto) {
+  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const k = Math.min(1, 1200 / Math.max(bmp.width, bmp.height));
+  const w = Math.round(bmp.width * k), hgt = Math.round(bmp.height * k);
+  const c = document.createElement("canvas"); c.width = w; c.height = hgt;
+  const g = c.getContext("2d");
+  g.drawImage(bmp, 0, 0, w, hgt);
+  const size = Math.max(16, Math.round(w / 22));
+  g.save();
+  g.translate(w / 2, hgt / 2); g.rotate(-28 * Math.PI / 180);
+  g.font = `700 ${size}px Arial,sans-serif`; g.fillStyle = "rgba(255,255,255,.23)";
+  g.textAlign = "center"; g.textBaseline = "middle";
+  const sx = Math.round(size * texto.length * 0.8), sy = Math.round(size * 4.2), diag = Math.hypot(w, hgt);
+  let row = 0;
+  for (let y = -diag; y < diag; y += sy, row++)
+    for (let x = -diag; x < diag; x += sx) g.fillText(texto, x + (row % 2 ? sx / 2 : 0), y);
+  g.restore();
+  const cs = Math.max(14, Math.round(w / 30)), pad = Math.max(10, Math.round(w / 50));
+  g.font = `700 ${cs}px Arial,sans-serif`; g.textAlign = "left"; g.textBaseline = "alphabetic";
+  g.fillStyle = "rgba(0,0,0,.6)"; g.fillText(texto, pad + 2, hgt - pad + 2);
+  g.fillStyle = "rgba(255,255,255,.92)"; g.fillText(texto, pad, hgt - pad);
+  return new Promise((ok, no) => c.toBlob((b) => b ? ok(b) : no(new Error("Falha ao processar a foto.")), "image/jpeg", 0.82));
+}
+
+/* ===== render do catálogo ===== */
+function render() {
+  const e = cat.empresa;
+  document.title = `Catálogo ${e.nome || ""}`.trim();
+  document.documentElement.style.setProperty("--cor", /^#[0-9a-f]{6}$/i.test(e.cor || "") ? e.cor : "#58bfec");
+  setMarcaSvg(e.marca || e.nome);
+  $("#logo").textContent = e.nome || "";
+  $("#hero-titulo").textContent = "Catálogo";
+  $("#hero-sub").textContent = e.slogan || "";
+  $("#hero-desc").textContent = e.descricao || "";
+  $("#hero-ticks").replaceChildren(...(e.beneficios || []).map((b) => h("li", {}, b)));
+  const d = $("#hero-destaque"); d.hidden = !e.destaque; d.textContent = e.destaque || "";
+  $("#mosaico").replaceChildren(...cat.produtos.filter((p) => p.fotos[0]).slice(0, 6).map((p) => photo(p.fotos[0], "")));
+  $("#rodape").textContent = e.rodape || "";
+  const ct = [];
+  if (e.instagram) ct.push(h("a", { href: `https://instagram.com/${encodeURIComponent(e.instagram)}`, target: "_blank", rel: "noopener" }, "@" + e.instagram));
+  $("#contato").replaceChildren(...ct);
+  if (!cat.abas.some((a) => a.id === aba)) aba = (cat.abas[0] || {}).id;
+  renderAbas(); renderGrade(); renderAdminBar();
+}
+
+function renderAbas() {
+  const el = $("#abas");
+  el.replaceChildren(...cat.abas.map((a) => {
+    const n = cat.produtos.filter((p) => p.aba === a.id).length;
+    return h("button", { class: "aba", role: "tab", id: "aba-" + a.id, "aria-selected": String(a.id === aba), tabindex: a.id === aba ? "0" : "-1",
+      onclick: () => { aba = a.id; history.replaceState(null, "", "#" + a.id); renderAbas(); renderGrade(); } },
+      a.nome, h("small", {}, String(n)));
+  }));
+  el.setAttribute("aria-label", "Categorias");
+  $("#grade").setAttribute("aria-labelledby", "aba-" + aba);
+}
+$("#abas").addEventListener("keydown", (ev) => {
+  if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+  const i = cat.abas.findIndex((a) => a.id === aba), n = cat.abas.length;
+  aba = cat.abas[(i + (ev.key === "ArrowRight" ? 1 : n - 1)) % n].id;
+  renderAbas(); renderGrade(); $("#aba-" + aba).focus();
+});
+
+function renderGrade() {
+  const lista = cat.produtos.filter((p) => p.aba === aba);
+  const g = $("#grade");
+  if (!lista.length) {
+    g.replaceChildren(h("div", { class: "vazio" }, h("h2", {}, "Em breve"),
+      h("p", {}, "Estamos preparando os produtos desta categoria."),
+      admin ? h("button", { class: "btn pri", onclick: () => editarProduto(null) }, "+ Novo produto") : null));
+    return;
+  }
+  g.replaceChildren(...lista.map((p) => {
+    const med = (p.specs || []).find((s) => /^medida/i.test(s[0]));
+    return h("article", { class: "card" },
+      h("button", { class: "abrir", onclick: () => abrirProduto(p.id), "aria-label": `${p.nome} ${p.nome2 || ""}, ver detalhes` },
+        photo(p.fotos[0] || "", p.nome),
+        h("div", { class: "corpo" },
+          h("div", { class: "chips" }, (p.selos || []).slice(0, 2).map((s) => h("span", { class: "chip" }, s))),
+          h("h3", { class: "titulo" }, p.nome, p.nome2 ? h("b", {}, p.nome2) : null),
+          med ? h("p", { class: "medidas" }, med[1]) : null)),
+      admin ? h("div", { class: "adm-card" },
+        h("button", { class: "btn", onclick: () => editarProduto(p.id) }, "✎ Editar"),
+        h("button", { class: "btn", "aria-label": "Mover para antes", onclick: () => mover(p.id, -1) }, "↑"),
+        h("button", { class: "btn", "aria-label": "Mover para depois", onclick: () => mover(p.id, 1) }, "↓")) : null);
+  }));
+}
+
+/* ===== detalhe do produto ===== */
+function abrirProduto(id) {
+  const p = cat.produtos.find((x) => x.id === id); if (!p) return;
+  const dlg = $("#dlg-produto");
+  const grande = photo(p.fotos[0] || "", p.nome, "grande");
+  const thumbs = h("div", { class: "thumbs" });
+  const troca = (u, btn) => { grande.style.backgroundImage = `url("${u}")`; thumbs.querySelectorAll("button").forEach((b) => b.removeAttribute("aria-current")); btn.setAttribute("aria-current", "true"); };
+  if (p.fotos.length > 1) p.fotos.forEach((u, i) => {
+    const b = h("button", { type: "button", "aria-label": `Foto ${i + 1}`, "aria-current": i === 0 ? "true" : null }, photo(u, ""));
+    b.onclick = () => troca(u, b); thumbs.append(b);
+  });
+  const g = p.garantia || {};
+  const wa = (cat.empresa.whatsapp || "").replace(/\D/g, "");
+  const info = h("div", { class: "info" },
+    h("div", { class: "chips" }, (p.selos || []).map((s) => h("span", { class: "chip" }, s))),
+    h("h2", {}, p.nome, p.nome2 ? h("b", {}, p.nome2) : null),
+    p.descricao ? h("p", { class: "desc" }, p.descricao) : null,
+    h("div", { class: "dest" }, (p.destaques || []).map((d) => h("div", {}, h("strong", {}, d.t), d.d))),
+    (p.specs || []).length ? h("div", { class: "specs" }, h("h3", {}, "Especificações técnicas"),
+      h("dl", {}, p.specs.map((s) => h("div", { class: "r" }, h("dt", {}, s[0]), h("dd", {}, s[1]))))) : null,
+    g.valor ? h("p", { class: "gar" + (g.destaque ? " ext" : "") }, h("span", { class: "ic", "aria-hidden": "true" }, "i"),
+      h("span", {}, h("small", {}, g.rotulo || "Garantia"), h("strong", {}, g.valor))) : null,
+    p.etiqueta && p.etiqueta.t ? h("div", { class: "etq" }, h("strong", {}, p.etiqueta.t), p.etiqueta.d || "") : null,
+    h("div", { class: "acoes" },
+      wa ? h("a", { class: "btn wa", target: "_blank", rel: "noopener",
+        href: `https://wa.me/${wa}?text=${encodeURIComponent(`Olá! Vi o produto "${`${p.nome} ${p.nome2 || ""}`.trim()}" no catálogo e gostaria de mais informações.`)}` }, "Pedir no WhatsApp") : null,
+      admin ? h("button", { class: "btn", onclick: () => { dlg.close(); editarProduto(p.id); } }, "✎ Editar") : null));
+  dlg.replaceChildren(h("button", { class: "fechar", type: "button", "data-fechar": "", "aria-label": "Fechar" }, "×"),
+    h("div", { class: "det" }, h("div", { class: "galeria" }, grande, thumbs), info));
+  dlg.showModal();
+}
+
+/* fecha diálogos: botão × e clique fora */
+document.addEventListener("click", (e) => {
+  const d = e.target.closest("dialog");
+  if (e.target.closest("[data-fechar]")) d.close();
+  else if (e.target.tagName === "DIALOG") e.target.close();
+});
+
+/* ===== login ===== */
+$("#btn-entrar").onclick = () => { if (admin) return; $("#login-msg").textContent = ""; $("#dlg-login").showModal(); $("#senha").focus(); };
+$("#form-login").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const msg = $("#login-msg"); msg.textContent = "";
+  try {
+    await api("login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ senha: $("#senha").value }) });
+    $("#senha").value = ""; $("#dlg-login").close();
+    admin = true; render(); toast("Modo edição ativado");
+  } catch (err) { msg.textContent = err.message; }
+});
+if (location.hash === "#admin") history.replaceState(null, "", location.pathname);
+
+function renderAdminBar() {
+  const b = $("#adm-bar"); b.hidden = !admin; $("#btn-entrar").hidden = admin || estatico;
+  if (!admin) return;
+  b.replaceChildren(h("span", {}, "Modo edição"),
+    h("button", { class: "btn", onclick: () => editarProduto(null) }, "+ Novo produto"),
+    h("button", { class: "btn", onclick: editarEmpresa }, "Empresa e abas"),
+    h("button", { class: "btn", onclick: async () => { await api("logout", { method: "POST" }).catch(() => {}); admin = false; render(); } }, "Sair"));
+}
+
+/* ===== salvar ===== */
+async function salvar(novo) {
+  await api("catalog", { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(novo) });
+  cat = novo;
+}
+async function mover(id, dir) {
+  const novo = clone(cat), i = novo.produtos.findIndex((p) => p.id === id);
+  let j = i + dir;
+  while (j >= 0 && j < novo.produtos.length && novo.produtos[j].aba !== novo.produtos[i].aba) j += dir;
+  if (j < 0 || j >= novo.produtos.length) return;
+  [novo.produtos[i], novo.produtos[j]] = [novo.produtos[j], novo.produtos[i]];
+  try { await salvar(novo); renderGrade(); } catch (e) { toast(e.message); }
+}
+
+/* ===== editor de produto ===== */
+function parInputs(a, b, ph) {
+  const row = h("div", { class: "par" },
+    h("input", { value: a || "", placeholder: ph[0], "aria-label": ph[0] }),
+    h("input", { value: b || "", placeholder: ph[1], "aria-label": ph[1] }),
+    h("button", { type: "button", class: "btn", "aria-label": "Remover linha", onclick: () => row.remove() }, "×"));
+  return row;
+}
+function editarProduto(id) {
+  const existente = id && cat.produtos.find((p) => p.id === id);
+  const p = existente ? clone(existente) : { id: "", aba, nome: "", nome2: "", selos: [], descricao: "", destaques: [], specs: [], garantia: { rotulo: "Garantia", valor: "" }, etiqueta: { t: "", d: "" }, fotos: [] };
+  let fotos = [...p.fotos];
+  const dlg = $("#dlg-editor");
+  const f = {
+    nome: h("input", { value: p.nome, required: true, id: "e-nome" }),
+    nome2: h("input", { value: p.nome2 || "", id: "e-nome2", placeholder: "Segunda linha (aparece em destaque)" }),
+    aba: h("select", { id: "e-aba" }, cat.abas.map((a) => h("option", { value: a.id, selected: a.id === p.aba }, a.nome))),
+    selos: h("input", { value: (p.selos || []).join(", "), id: "e-selos", placeholder: "Ex.: ESPUMA, LANÇAMENTO" }),
+    desc: h("textarea", { id: "e-desc" }, p.descricao || ""),
+    gr: h("input", { value: (p.garantia || {}).rotulo || "Garantia", "aria-label": "Rótulo da garantia" }),
+    gv: h("input", { value: (p.garantia || {}).valor || "", placeholder: "Ex.: 03 Meses", "aria-label": "Prazo da garantia" }),
+    et: h("input", { value: (p.etiqueta || {}).t || "", placeholder: "Título", "aria-label": "Título da etiqueta" }),
+    ed: h("input", { value: (p.etiqueta || {}).d || "", placeholder: "Subtítulo", "aria-label": "Subtítulo da etiqueta" }),
+  };
+  const dest = h("div"), specs = h("div"), fotosEl = h("div", { class: "fotos-ed" }), msg = h("p", { class: "msg", role: "status" });
+  (p.destaques.length ? p.destaques : [{}, {}, {}, {}]).forEach((d) => dest.append(parInputs(d.t, d.d, ["Título", "Descrição curta"])));
+  (p.specs.length ? p.specs : [["Tipo", ""], ["Medidas", ""]]).forEach((s) => specs.append(parInputs(s[0], s[1], ["Campo", "Valor"])));
+  const pintaFotos = () => fotosEl.replaceChildren(...fotos.map((u, i) => h("div", { class: "it" }, photo(u, `Foto ${i + 1}`),
+    h("div", { class: "ctl" },
+      h("button", { type: "button", "aria-label": "Mover para esquerda", disabled: i === 0, onclick: () => { [fotos[i - 1], fotos[i]] = [fotos[i], fotos[i - 1]]; pintaFotos(); } }, "←"),
+      h("button", { type: "button", "aria-label": "Remover foto", onclick: () => { fotos.splice(i, 1); pintaFotos(); } }, "🗑"),
+      h("button", { type: "button", "aria-label": "Mover para direita", disabled: i === fotos.length - 1, onclick: () => { [fotos[i + 1], fotos[i]] = [fotos[i], fotos[i + 1]]; pintaFotos(); } }, "→")))));
+  pintaFotos();
+  const arq = h("input", { type: "file", accept: "image/*", multiple: true, id: "e-arq", onchange: async () => {
+    msg.className = "msg"; const marca = cat.empresa.marca || cat.empresa.nome || "";
+    for (const file of arq.files) {
+      try {
+        msg.textContent = `Enviando ${file.name}…`;
+        const blob = await marcar(file, marca);
+        const r = await api("upload", { method: "POST", headers: { "content-type": "image/jpeg" }, body: blob });
+        fotos.push(r.url); pintaFotos();
+      } catch (err) { msg.className = "msg erro"; msg.textContent = `${file.name}: ${err.message}`; return; }
+    }
+    msg.className = "msg ok"; msg.textContent = "Fotos enviadas com a marca d'água."; arq.value = "";
+  } });
+  const coleta = (box) => [...box.children].map((r) => [...r.querySelectorAll("input")].map((i) => i.value.trim())).filter((v) => v[0] || v[1]);
+  const form = h("form", { class: "form", onsubmit: async (ev) => {
+    ev.preventDefault();
+    const novo = clone(cat);
+    const prod = {
+      id: p.id || `${slug(f.nome.value + " " + f.nome2.value) || "produto"}-${Math.random().toString(36).slice(2, 6)}`,
+      aba: f.aba.value, nome: f.nome.value.trim(), nome2: f.nome2.value.trim(),
+      selos: f.selos.value.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 4),
+      descricao: f.desc.value.trim(),
+      destaques: coleta(dest).map((v) => ({ t: v[0], d: v[1] })),
+      specs: coleta(specs), garantia: { rotulo: f.gr.value.trim() || "Garantia", valor: f.gv.value.trim(), ...((p.garantia || {}).destaque ? { destaque: true } : {}) },
+      etiqueta: { t: f.et.value.trim(), d: f.ed.value.trim() }, fotos,
+    };
+    const i = novo.produtos.findIndex((x) => x.id === prod.id);
+    if (i >= 0) novo.produtos[i] = prod; else novo.produtos.push(prod);
+    try { msg.className = "msg"; msg.textContent = "Salvando…"; await salvar(novo); aba = prod.aba; dlg.close(); render(); toast("Salvo"); }
+    catch (err) { msg.className = "msg erro"; msg.textContent = err.message; }
+  } },
+    h("button", { class: "fechar", type: "button", "data-fechar": "", "aria-label": "Fechar" }, "×"),
+    h("h2", {}, existente ? "Editar produto" : "Novo produto"),
+    h("label", { for: "e-nome" }, "Nome"), f.nome, h("label", { for: "e-nome2" }, "Nome (segunda linha)"), f.nome2,
+    h("label", { for: "e-aba" }, "Aba"), f.aba,
+    h("label", { for: "e-selos" }, "Selos (separados por vírgula)"), f.selos,
+    h("label", { for: "e-desc" }, "Descrição"), f.desc,
+    h("label", {}, "Destaques"), dest, h("button", { type: "button", class: "btn", onclick: () => dest.append(parInputs("", "", ["Título", "Descrição curta"])) }, "+ Destaque"),
+    h("label", {}, "Especificações técnicas"), specs, h("button", { type: "button", class: "btn", onclick: () => specs.append(parInputs("", "", ["Campo", "Valor"])) }, "+ Campo"),
+    h("label", {}, "Garantia"), h("div", { class: "par", style: "grid-template-columns:1fr 1fr" }, f.gr, f.gv),
+    h("label", {}, "Etiqueta sobre a foto"), h("div", { class: "par", style: "grid-template-columns:1fr 1fr" }, f.et, f.ed),
+    h("label", { for: "e-arq" }, "Fotos (a marca d'água é aplicada automaticamente)"), fotosEl, arq, msg,
+    h("div", { class: "rodape-form" },
+      h("button", { class: "btn pri", type: "submit" }, "Salvar"),
+      h("button", { class: "btn", type: "button", "data-fechar": "" }, "Cancelar"),
+      existente ? h("button", { class: "btn perigo", type: "button", onclick: async () => {
+        if (!confirm(`Excluir "${p.nome}"?`)) return;
+        const novo = clone(cat); novo.produtos = novo.produtos.filter((x) => x.id !== p.id);
+        try { await salvar(novo); dlg.close(); render(); toast("Excluído"); } catch (err) { msg.className = "msg erro"; msg.textContent = err.message; }
+      } }, "Excluir") : null));
+  dlg.replaceChildren(form); dlg.showModal();
+}
+
+/* ===== editor de empresa e abas ===== */
+function editarEmpresa() {
+  const e = cat.empresa, dlg = $("#dlg-editor");
+  const campo = (k, rot, tipo = "input", extra = {}) => {
+    const el = tipo === "textarea" ? h("textarea", { id: "c-" + k }, Array.isArray(e[k]) ? e[k].join("\n") : e[k] || "") : h("input", { id: "c-" + k, value: e[k] || "", ...extra });
+    return [h("label", { for: "c-" + k }, rot), el, el];
+  };
+  const F = {}; const linhas = [];
+  [["nome", "Nome da empresa"], ["slogan", "Frase de destaque"], ["descricao", "Descrição", "textarea"], ["beneficios", "Benefícios (um por linha)", "textarea"],
+   ["destaque", "Faixa de destaque"], ["rodape", "Texto do rodapé"], ["instagram", "Instagram (sem @)"],
+   ["whatsapp", "WhatsApp com DDD (ex.: 5511999999999)", "input", { inputmode: "numeric" }],
+   ["marca", "Texto da marca d'água (fotos novas)"], ["cor", "Cor da marca", "input", { type: "color" }]]
+    .forEach(([k, r, t, x]) => { const [l, el, ref] = campo(k, r, t, x); F[k] = ref; linhas.push(l, el); });
+  let abas = clone(cat.abas);
+  const abasEl = h("div"), msg = h("p", { class: "msg", role: "status" });
+  const pinta = () => abasEl.replaceChildren(...abas.map((a, i) => {
+    const usado = cat.produtos.some((p) => p.aba === a.id);
+    return h("div", { class: "par", style: "grid-template-columns:1fr auto auto auto" },
+      h("input", { value: a.nome, "aria-label": "Nome da aba", oninput: (ev) => { a.nome = ev.target.value; } }),
+      h("button", { type: "button", class: "btn", disabled: i === 0, "aria-label": "Mover para cima", onclick: () => { [abas[i - 1], abas[i]] = [abas[i], abas[i - 1]]; pinta(); } }, "↑"),
+      h("button", { type: "button", class: "btn", disabled: i === abas.length - 1, "aria-label": "Mover para baixo", onclick: () => { [abas[i + 1], abas[i]] = [abas[i], abas[i + 1]]; pinta(); } }, "↓"),
+      h("button", { type: "button", class: "btn", disabled: usado, title: usado ? "Mova ou exclua os produtos desta aba antes" : "", "aria-label": "Remover aba", onclick: () => { abas.splice(i, 1); pinta(); } }, "×"));
+  }));
+  pinta();
+  const form = h("form", { class: "form", onsubmit: async (ev) => {
+    ev.preventDefault();
+    const novo = clone(cat);
+    novo.empresa = { ...e, nome: F.nome.value.trim(), slogan: F.slogan.value.trim(), descricao: F.descricao.value.trim(),
+      beneficios: F.beneficios.value.split("\n").map((s) => s.trim()).filter(Boolean), destaque: F.destaque.value.trim(),
+      rodape: F.rodape.value.trim(), instagram: F.instagram.value.trim().replace(/^@/, ""), whatsapp: F.whatsapp.value.replace(/\D/g, ""),
+      marca: F.marca.value.trim(), cor: F.cor.value };
+    const usados = new Set(); novo.abas = abas.filter((a) => a.nome.trim()).map((a) => {
+      let id = a.id || slug(a.nome) || "aba"; while (usados.has(id)) id += "-2"; usados.add(id); return { id, nome: a.nome.trim() };
+    });
+    try { msg.textContent = "Salvando…"; await salvar(novo); dlg.close(); render(); toast("Salvo"); }
+    catch (err) { msg.className = "msg erro"; msg.textContent = err.message; }
+  } },
+    h("button", { class: "fechar", type: "button", "data-fechar": "", "aria-label": "Fechar" }, "×"),
+    h("h2", {}, "Empresa e abas"), ...linhas,
+    h("label", {}, "Abas"), abasEl,
+    h("button", { type: "button", class: "btn", onclick: () => { abas.push({ id: "", nome: "" }); pinta(); } }, "+ Aba"), msg,
+    h("div", { class: "rodape-form" }, h("button", { class: "btn pri", type: "submit" }, "Salvar"), h("button", { class: "btn", type: "button", "data-fechar": "" }, "Cancelar")));
+  dlg.replaceChildren(form); dlg.showModal();
+}
+
+/* ===== início ===== */
+(async function init() {
+  try {
+    try {
+      [cat, { admin }] = await Promise.all([api("catalog"), api("me").catch(() => ({ admin: false }))]);
+    } catch (_) {
+      // Modo estático (sem backend): lê o catálogo direto dos arquivos publicados.
+      const r = await fetch("/seed/catalog.json");
+      if (!r.ok) throw new Error("sem catálogo");
+      cat = JSON.parse((await r.text()).replace(/\/api\/img\/seed-/g, "/seed/"));
+      admin = false; estatico = true;
+    }
+    const hash = decodeURIComponent(location.hash.slice(1));
+    aba = cat.abas.some((a) => a.id === hash) ? hash : null;
+    render();
+  } catch (err) {
+    $("#grade").replaceChildren(h("div", { class: "vazio" }, h("h2", {}, "Não foi possível carregar o catálogo"), h("p", {}, "Atualize a página em alguns instantes.")));
+  }
+})();
+</script>
+</body>
+</html>

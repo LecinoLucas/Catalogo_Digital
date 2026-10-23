@@ -1,0 +1,639 @@
+{
+ "empresa": {
+  "nome": "Pioneira",
+  "slogan": "Conforto e funcionalidade para todos os espaços",
+  "descricao": "Soluções modernas para otimizar ambientes com praticidade, design e qualidade estrutural. Modelos ideais para quem valoriza versatilidade sem abrir mão do conforto.",
+  "beneficios": [
+   "Ideal para quartos compactos",
+   "Opções com auxiliar e com baú",
+   "Estruturas resistentes e duráveis"
+  ],
+  "destaque": "Mais de 30 anos transformando o sono em bem-estar",
+  "rodape": "Entrega rápida • Pronta entrega • Atendimento especializado",
+  "instagram": "pioneiracolchoes",
+  "whatsapp": "",
+  "marca": "@pioneiracolchoes",
+  "cor": "#58bfec"
+ },
+ "abas": [
+  {
+   "id": "bicamas",
+   "nome": "Bicamas"
+  },
+  {
+   "id": "box-bau",
+   "nome": "Box Baú"
+  },
+  {
+   "id": "colchoes",
+   "nome": "Colchões"
+  }
+ ],
+ "produtos": [
+  {
+   "id": "bicama-espuma-simples",
+   "aba": "bicamas",
+   "nome": "Bicama de",
+   "nome2": "Espuma Simples",
+   "selos": [
+    "ESPUMA",
+    "LANÇAMENTO"
+   ],
+   "descricao": "Solução inteligente e funcional, perfeita para otimizar o espaço do seu quarto sem abrir mão do conforto.",
+   "destaques": [
+    {
+     "t": "Auxiliar Retrátil",
+     "d": "Cama extra prática e removível para o dia a dia."
+    },
+    {
+     "t": "Eucalipto",
+     "d": "Estrutura reforçada em madeira de reflorestamento."
+    },
+    {
+     "t": "Compacta",
+     "d": "Design ideal para quartos com espaço reduzido."
+    },
+    {
+     "t": "Custo-Benefício",
+     "d": "Qualidade Pioneira com preço acessível."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Bicama com cama auxiliar"
+    ],
+    [
+     "Materiais",
+     "Madeira Eucalipto / Espuma"
+    ],
+    [
+     "Medidas",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Observação",
+     "Não acompanha colchão superior"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Praticidade",
+    "d": "Ideal para hóspedes"
+   },
+   "fotos": [
+    "/api/img/seed-bicama-espuma-simples.jpg"
+   ]
+  },
+  {
+   "id": "bicama-molas-premium-bege",
+   "aba": "bicamas",
+   "nome": "Bicama de Molas",
+   "nome2": "Premium Bege",
+   "selos": [
+    "MOLAS",
+    "LINHA PREMIUM"
+   ],
+   "descricao": "A união perfeita entre conforto, versatilidade e acabamento sofisticado para o seu quarto.",
+   "destaques": [
+    {
+     "t": "Molas Ensacadas",
+     "d": "Suporte individualizado ponto a ponto."
+    },
+    {
+     "t": "Malha Cronos",
+     "d": "Tampo com toque macio e respirável."
+    },
+    {
+     "t": "Abertura Bilateral",
+     "d": "Auxiliar abre para ambos os lados."
+    },
+    {
+     "t": "Acabamento",
+     "d": "Design premium e materiais nobres."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Bicama com auxiliar retrátil"
+    ],
+    [
+     "Materiais",
+     "Molejo Ensacado / Malha"
+    ],
+    [
+     "Cor",
+     "Bege (Tecido Suede/Linho)"
+    ],
+    [
+     "Medidas",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Observação",
+     "Colchão superior não incluso"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Conforto Premium",
+    "d": "Molas Ensacadas"
+   },
+   "fotos": [
+    "/api/img/seed-bicama-molas-premium-bege.jpg"
+   ]
+  },
+  {
+   "id": "tricama-3em1",
+   "aba": "bicamas",
+   "nome": "Tricama",
+   "nome2": "(3 em 1)",
+   "selos": [
+    "AÇO",
+    "MULTIFUNCIONAL"
+   ],
+   "descricao": "A máxima versatilidade em um único produto. Transforma-se facilmente para atender todas as suas necessidades.",
+   "destaques": [
+    {
+     "t": "Versátil",
+     "d": "Expande e se transforma em cama de casal confortável."
+    },
+    {
+     "t": "Resistente",
+     "d": "Estrutura 100% em aço de alta durabilidade."
+    },
+    {
+     "t": "Otimiza Espaço",
+     "d": "3 soluções de sono ocupando o espaço de uma."
+    },
+    {
+     "t": "Prática",
+     "d": "Fácil manuseio para montar e desmontar."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Tricama expansível"
+    ],
+    [
+     "Materiais",
+     "Estrutura 100% Aço"
+    ],
+    [
+     "Medida",
+     "Solteiro (088x188)"
+    ],
+    [
+     "Medida Externa",
+     "94 x 194 x 47 cm"
+    ],
+    [
+     "Altura Máx. Colchões",
+     "26 cm (Não inclusos)"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia estendida",
+    "valor": "02 Anos",
+    "destaque": true
+   },
+   "etiqueta": {
+    "t": "3 em 1",
+    "d": "Solteiro, Auxiliar e Casal"
+   },
+   "fotos": [
+    "/api/img/seed-tricama-3em1.jpg"
+   ]
+  },
+  {
+   "id": "bicama-espuma-linho-cinza",
+   "aba": "bicamas",
+   "nome": "Bicama de Espuma",
+   "nome2": "Linho Cinza",
+   "selos": [
+    "ESPUMA D20",
+    "LINHO"
+   ],
+   "descricao": "Durabilidade e firmeza com acabamento sofisticado em linho cinza e espuma de alta qualidade.",
+   "destaques": [
+    {
+     "t": "Espuma Certificada",
+     "d": "Densidade D20 para maior durabilidade."
+    },
+    {
+     "t": "Antiderrapante",
+     "d": "Tecido superior que evita deslizes."
+    },
+    {
+     "t": "Estrutura Robusta",
+     "d": "7 pés fixos e 2 rodízios na auxiliar."
+    },
+    {
+     "t": "Suporte 120kg",
+     "d": "Alta capacidade de carga garantida."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Bicama com auxiliar"
+    ],
+    [
+     "Materiais",
+     "Madeira Eucalipto / Espuma D20"
+    ],
+    [
+     "Medidas",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Cor",
+     "Linho Cinza"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Alta Resistência",
+    "d": "Suporte Garantido"
+   },
+   "fotos": [
+    "/api/img/seed-bicama-espuma-linho-cinza.jpg"
+   ]
+  },
+  {
+   "id": "bicama-molas-linho-cinza",
+   "aba": "bicamas",
+   "nome": "Bicama de Molas",
+   "nome2": "Linho Cinza",
+   "selos": [
+    "MOLAS",
+    "PREMIUM"
+   ],
+   "descricao": "Combinação perfeita de suporte uniforme e elegância, com design clean que se adapta a qualquer ambiente.",
+   "destaques": [
+    {
+     "t": "Molejo Suporte",
+     "d": "Conforto uniforme para noites tranquilas."
+    },
+    {
+     "t": "Design Clean",
+     "d": "Visual versátil e acabamento elegante."
+    },
+    {
+     "t": "Tampo em Malha",
+     "d": "Toque suave e maior respirabilidade."
+    },
+    {
+     "t": "Pés + Rodízios",
+     "d": "Praticidade no manuseio da auxiliar."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Bicama com cama auxiliar"
+    ],
+    [
+     "Materiais",
+     "Madeira Eucalipto / Malha / Rodízios"
+    ],
+    [
+     "Medidas",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Cor",
+     "Linho Cinza"
+    ],
+    [
+     "Observação",
+     "Colchão superior vendido separadamente"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Versatilidade",
+    "d": "Design Clean & Moderno"
+   },
+   "fotos": [
+    "/api/img/seed-bicama-molas-linho-cinza.jpg"
+   ]
+  },
+  {
+   "id": "bicama-personalizavel",
+   "aba": "bicamas",
+   "nome": "Bicama",
+   "nome2": "Personalizável",
+   "selos": [
+    "SOB MEDIDA",
+    "EXCLUSIVO"
+   ],
+   "descricao": "Funcionalidade inteligente com design sob medida. Ideal para quartos compactos, projetos planejados ou ambientes que exigem soluções exclusivas.",
+   "destaques": [
+    {
+     "t": "Personalização Total",
+     "d": "Altura, medidas, cores e tecidos sob medida."
+    },
+    {
+     "t": "Estrutura Resistente",
+     "d": "Madeira de eucalipto reflorestado."
+    },
+    {
+     "t": "Versatilidade de Uso",
+     "d": "Cama principal + auxiliar retrátil."
+    },
+    {
+     "t": "Projeto Sob Medida",
+     "d": "Adaptação perfeita ao layout do quarto."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Bicama Personalizável"
+    ],
+    [
+     "Estrutura",
+     "Madeira eucalipto tratada e reforçada"
+    ],
+    [
+     "Funcionalidade",
+     "Cama principal + auxiliar retrátil"
+    ],
+    [
+     "Medidas",
+     "Solteiro / Solteirão / Sob medida"
+    ],
+    [
+     "Personalização",
+     "Altura, largura, cor e tecido"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Sob Medida",
+    "d": "Personalização Total"
+   },
+   "fotos": [
+    "/api/img/seed-bicama-personalizavel.jpg"
+   ]
+  },
+  {
+   "id": "box-bau-casal-auxiliar-premium",
+   "aba": "box-bau",
+   "nome": "Box Baú Casal com",
+   "nome2": "Auxiliar Premium",
+   "selos": [
+    "PREMIUM",
+    "ESPAÇO EXTRA"
+   ],
+   "descricao": "A união perfeita entre otimização de espaço, organização e o conforto de uma cama extra sempre à mão.",
+   "destaques": [
+    {
+     "t": "Armazenamento",
+     "d": "Baú interno amplo para roupas de cama e objetos."
+    },
+    {
+     "t": "Auxiliar Retrátil",
+     "d": "Cama extra em espuma de alta qualidade."
+    },
+    {
+     "t": "Organização",
+     "d": "Mantenha o quarto sempre organizado e funcional."
+    },
+    {
+     "t": "Compacto",
+     "d": "Ideal para ambientes pequenos e apartamentos."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Box Baú com Auxiliar Espuma Premium"
+    ],
+    [
+     "Funcionalidades",
+     "Baú + Cama Auxiliar Retrátil"
+    ],
+    [
+     "Medidas",
+     "Casal (138x188)"
+    ],
+    [
+     "Observação",
+     "Colchão superior vendido separadamente"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Versatilidade",
+    "d": "3 em 1"
+   },
+   "fotos": [
+    "/api/img/seed-box-bau-casal-auxiliar-premium.jpg"
+   ]
+  },
+  {
+   "id": "box-bau-auxiliar-espuma-premium",
+   "aba": "box-bau",
+   "nome": "Box Baú com Auxiliar",
+   "nome2": "Espuma Premium",
+   "selos": [
+    "PREMIUM",
+    "CORES"
+   ],
+   "descricao": "Disponível nas versões Solteiro e Solteirão, unindo o máximo aproveitamento de espaço com elegância.",
+   "destaques": [
+    {
+     "t": "Tamanhos Variados",
+     "d": "Opções Solteiro (088cm) e Solteirão (108cm)."
+    },
+    {
+     "t": "Cores Modernas",
+     "d": "Acabamento refinado em tecido Bege ou Cinza."
+    },
+    {
+     "t": "Baú Espaçoso",
+     "d": "Amplo espaço interno para organização."
+    },
+    {
+     "t": "Cama Auxiliar",
+     "d": "Praticidade extra com espuma de alta qualidade."
+    }
+   ],
+   "specs": [
+    [
+     "Modelos",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Revestimento",
+     "Tecido Linho (Bege ou Cinza)"
+    ],
+    [
+     "Estrutura",
+     "Madeira tratada e reforçada"
+    ],
+    [
+     "Observação",
+     "Não acompanha colchão superior"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Versatilidade",
+    "d": "Solteiro & Solteirão"
+   },
+   "fotos": [
+    "/api/img/seed-box-bau-auxiliar-espuma-premium.jpg"
+   ]
+  },
+  {
+   "id": "box-bau-auxiliar-simples",
+   "aba": "box-bau",
+   "nome": "Box Baú com",
+   "nome2": "Auxiliar Simples",
+   "selos": [
+    "BOX BAÚ",
+    "CUSTO-BENEFÍCIO"
+   ],
+   "descricao": "Mais espaço, mais funcionalidade e zero desperdício. A união perfeita entre organização e uma cama extra para visitas.",
+   "destaques": [
+    {
+     "t": "Custo-Benefício",
+     "d": "Qualidade e funcionalidade com preço acessível."
+    },
+    {
+     "t": "Organização",
+     "d": "Espaço interno amplo para guardar roupas de cama."
+    },
+    {
+     "t": "Auxiliar Retrátil",
+     "d": "Cama extra sempre pronta para receber visitas."
+    },
+    {
+     "t": "Resistente",
+     "d": "Estrutura robusta pensada para o uso diário."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Box Baú com Auxiliar Simples"
+    ],
+    [
+     "Funcionalidades",
+     "Baú + Auxiliar Retrátil"
+    ],
+    [
+     "Medidas",
+     "Solteiro (088x188) / Solteirão (108x198)"
+    ],
+    [
+     "Observação",
+     "Não acompanha colchão superior"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Funcionalidade",
+    "d": "Organização + Cama Extra"
+   },
+   "fotos": [
+    "/api/img/seed-box-bau-auxiliar-simples.jpg"
+   ]
+  },
+  {
+   "id": "box-duo-personalizavel",
+   "aba": "box-bau",
+   "nome": "Box Duo",
+   "nome2": "Personalizável",
+   "selos": [
+    "SOB MEDIDA",
+    "EXCLUSIVO"
+   ],
+   "descricao": "Funcionalidade inteligente aliada ao conforto sob medida. Ideal para quem busca otimizar o espaço com elegância e praticidade no dia a dia.",
+   "destaques": [
+    {
+     "t": "Personalização Total",
+     "d": "Altura, largura, cores e tecidos sob medida."
+    },
+    {
+     "t": "Estrutura Resistente",
+     "d": "Madeira de eucalipto tratada e reforçada."
+    },
+    {
+     "t": "Versatilidade de Uso",
+     "d": "Casal, Queen ou King com auxiliar retrátil."
+    },
+    {
+     "t": "Design Sob Medida",
+     "d": "Ideal para quartos compactos e projetos planejados."
+    }
+   ],
+   "specs": [
+    [
+     "Tipo",
+     "Box com Auxiliar Personalizável"
+    ],
+    [
+     "Estrutura",
+     "Madeira eucalipto tratada e reforçada"
+    ],
+    [
+     "Funcionalidade",
+     "Cama principal + auxiliar retrátil"
+    ],
+    [
+     "Medidas",
+     "Casal / Queen / King / Sob medida"
+    ],
+    [
+     "Personalização",
+     "Altura, largura, cor e tecido"
+    ],
+    [
+     "Colchões",
+     "Vendidos separadamente"
+    ]
+   ],
+   "garantia": {
+    "rotulo": "Garantia",
+    "valor": "03 Meses"
+   },
+   "etiqueta": {
+    "t": "Sob Medida",
+    "d": "Casal / Queen / King"
+   },
+   "fotos": [
+    "/api/img/seed-box-duo-personalizavel.jpg"
+   ]
+  }
+ ]
+}
