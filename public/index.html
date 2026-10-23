@@ -204,6 +204,10 @@ function h(tag, props, ...kids) {
 }
 const slug = (s) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 const clone = (o) => JSON.parse(JSON.stringify(o));
+/* WhatsApp: aceita vários números (com ou sem DDI 55) e devolve só dígitos com 55 na frente */
+const zaps = () => (cat.empresa.whatsapps || []).map((n) => String(n).replace(/\D/g, "")).filter((n) => n.length >= 10)
+  .map((n) => (n.length <= 11 ? "55" + n : n));
+const fmtZap = (n) => { const l = n.replace(/^55/, ""); return l.length === 11 ? `(${l.slice(0, 2)}) ${l.slice(2, 7)}-${l.slice(7)}` : l.length === 10 ? `(${l.slice(0, 2)}) ${l.slice(2, 6)}-${l.slice(6)}` : n; };
 async function api(path, opts = {}) {
   const r = await fetch("/api/" + path, { credentials: "same-origin", ...opts });
   const data = await r.json().catch(() => ({}));
@@ -277,8 +281,9 @@ function render() {
   $("#mosaico").replaceChildren(...cat.produtos.filter((p) => p.fotos[0]).slice(0, 6).map((p) => photo(p.fotos[0], "")));
   $("#rodape").textContent = e.rodape || "";
   const ct = [];
+  zaps().forEach((n) => ct.push(h("a", { href: `https://wa.me/${n}`, target: "_blank", rel: "noopener" }, "WhatsApp " + fmtZap(n))));
   if (e.instagram) ct.push(h("a", { href: `https://instagram.com/${encodeURIComponent(e.instagram)}`, target: "_blank", rel: "noopener" }, "@" + e.instagram));
-  $("#contato").replaceChildren(...ct);
+  $("#contato").replaceChildren(...ct.flatMap((x, i) => (i ? [" · ", x] : [x])));
   if (!cat.abas.some((a) => a.id === aba)) aba = (cat.abas[0] || {}).id;
   renderAbas(); renderGrade(); renderAdminBar();
 }
@@ -338,7 +343,7 @@ function abrirProduto(id) {
     b.onclick = () => troca(u, b); thumbs.append(b);
   });
   const g = p.garantia || {};
-  const wa = (cat.empresa.whatsapp || "").replace(/\D/g, "");
+  const msgWa = encodeURIComponent(`Olá! Vi o produto "${`${p.nome} ${p.nome2 || ""}`.trim()}" no catálogo e gostaria de mais informações.`);
   const info = h("div", { class: "info" },
     h("div", { class: "chips" }, (p.selos || []).map((s) => h("span", { class: "chip" }, s))),
     h("h2", {}, p.nome, p.nome2 ? h("b", {}, p.nome2) : null),
@@ -350,8 +355,7 @@ function abrirProduto(id) {
       h("span", {}, h("small", {}, g.rotulo || "Garantia"), h("strong", {}, g.valor))) : null,
     p.etiqueta && p.etiqueta.t ? h("div", { class: "etq" }, h("strong", {}, p.etiqueta.t), p.etiqueta.d || "") : null,
     h("div", { class: "acoes" },
-      wa ? h("a", { class: "btn wa", target: "_blank", rel: "noopener",
-        href: `https://wa.me/${wa}?text=${encodeURIComponent(`Olá! Vi o produto "${`${p.nome} ${p.nome2 || ""}`.trim()}" no catálogo e gostaria de mais informações.`)}` }, "Pedir no WhatsApp") : null,
+      ...zaps().map((n) => h("a", { class: "btn wa", target: "_blank", rel: "noopener", href: `https://wa.me/${n}?text=${msgWa}` }, "WhatsApp " + fmtZap(n))),
       admin ? h("button", { class: "btn", onclick: () => { dlg.close(); editarProduto(p.id); } }, "✎ Editar") : null));
   dlg.replaceChildren(h("button", { class: "fechar", type: "button", "data-fechar": "", "aria-label": "Fechar" }, "×"),
     h("div", { class: "det" }, h("div", { class: "galeria" }, grande, thumbs), info));
@@ -496,7 +500,7 @@ function editarEmpresa() {
   const F = {}; const linhas = [];
   [["nome", "Nome da empresa"], ["slogan", "Frase de destaque"], ["descricao", "Descrição", "textarea"], ["beneficios", "Benefícios (um por linha)", "textarea"],
    ["destaque", "Faixa de destaque"], ["rodape", "Texto do rodapé"], ["instagram", "Instagram (sem @)"],
-   ["whatsapp", "WhatsApp com DDD (ex.: 5511999999999)", "input", { inputmode: "numeric" }],
+   ["whatsapps", "WhatsApp com DDD (um número por linha)", "textarea"],
    ["marca", "Texto da marca d'água (fotos novas)"], ["cor", "Cor da marca", "input", { type: "color" }]]
     .forEach(([k, r, t, x]) => { const [l, el, ref] = campo(k, r, t, x); F[k] = ref; linhas.push(l, el); });
   let abas = clone(cat.abas);
@@ -515,7 +519,7 @@ function editarEmpresa() {
     const novo = clone(cat);
     novo.empresa = { ...e, nome: F.nome.value.trim(), slogan: F.slogan.value.trim(), descricao: F.descricao.value.trim(),
       beneficios: F.beneficios.value.split("\n").map((s) => s.trim()).filter(Boolean), destaque: F.destaque.value.trim(),
-      rodape: F.rodape.value.trim(), instagram: F.instagram.value.trim().replace(/^@/, ""), whatsapp: F.whatsapp.value.replace(/\D/g, ""),
+      rodape: F.rodape.value.trim(), instagram: F.instagram.value.trim().replace(/^@/, ""), whatsapps: F.whatsapps.value.split("\n").map((n) => n.replace(/\D/g, "")).filter(Boolean),
       marca: F.marca.value.trim(), cor: F.cor.value };
     const usados = new Set(); novo.abas = abas.filter((a) => a.nome.trim()).map((a) => {
       let id = a.id || slug(a.nome) || "aba"; while (usados.has(id)) id += "-2"; usados.add(id); return { id, nome: a.nome.trim() };
