@@ -72,7 +72,7 @@
     </div>
     <div class="mt-10 flex items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-white/50">
       <span id="copy"></span>
-      <button id="btn-entrar" type="button" class="inline-flex h-11 items-center gap-1.5 rounded-lg px-3 text-white/50 transition hover:text-white">Área restrita</button>
+      <button id="btn-entrar" type="button" class="inline-flex h-11 items-center gap-1.5 rounded-lg px-3 text-white/70 transition hover:text-white">Área restrita</button>
     </div>
   </div>
 </footer>
@@ -99,7 +99,8 @@
     <label for="senha" class="mt-5 mb-1.5 block text-sm font-semibold">Senha</label>
     <input id="senha" type="password" autocomplete="current-password" required
       class="h-12 w-full rounded-xl border border-line bg-white px-3.5 text-base outline-none transition focus:border-brand-ink focus:ring-4 focus:ring-brand/25">
-    <p id="login-msg" role="alert" class="mt-2 min-h-5 text-sm font-medium text-red-700"></p>
+    <label class="mt-2 flex min-h-11 items-center gap-2.5 text-[15px]"><input id="ver-senha" type="checkbox" class="size-5 accent-ink"> Mostrar senha</label>
+    <p id="login-msg" role="alert" class="min-h-5 text-sm font-medium text-red-700"></p>
     <button type="submit" class="mt-2 h-12 w-full rounded-xl bg-ink text-[15px] font-bold text-white transition hover:bg-ink/90 active:scale-[.98]">Entrar</button>
   </form>
 </dialog>
@@ -176,7 +177,7 @@ const C = {
   close: "grid size-11 place-items-center rounded-full bg-white/95 text-ink shadow-md ring-1 ring-black/5 backdrop-blur transition hover:bg-white active:scale-95",
 };
 
-const VERSAO = "v3";
+const VERSAO = "v4";
 
 /* ===== estado ===== */
 let cat = null, admin = false, aba = null, busca = "", estatico = false, fechandoPorVoltar = false;
@@ -295,7 +296,7 @@ function render() {
   $("#btn-busca").replaceChildren(icon("search", "size-6"));
   $("#zap-topo").replaceChildren(...[zapButton({ label: "WhatsApp", cls: CTA_SMALL })].filter(Boolean));
 
-  const capa = e.capa || ((cat.produtos.find((p) => p.fotos[0]) || { fotos: [] }).fotos[0]);
+  const capa = e.capa || ((cat.produtos.find((p) => visivel(p) && p.fotos[0]) || { fotos: [] }).fotos[0]);
   const hf = $("#hero-foto"); if (capa) hf.style.backgroundImage = `url("${capa}")`;
   $("#hero-eyebrow").replaceChildren(icon("star", "size-3.5"), e.destaque || `Catálogo ${e.nome || ""}`);
   $("#hero-titulo").textContent = e.slogan || "Nossos produtos";
@@ -325,7 +326,7 @@ function render() {
 
 function renderAbas() {
   $("#abas").replaceChildren(...cat.abas.map((a) => {
-    const n = cat.produtos.filter((p) => p.aba === a.id).length;
+    const n = cat.produtos.filter((p) => p.aba === a.id && visivel(p)).length;
     const sel = a.id === aba && !busca;
     return h("button", { type: "button", role: "tab", id: "aba-" + a.id, "aria-selected": String(sel), tabindex: sel ? "0" : "-1",
       class: `inline-flex h-11 shrink-0 items-center gap-2 rounded-full border px-5 text-[15px] font-semibold transition active:scale-[.97] ${sel ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-ink/30"}`,
@@ -351,14 +352,16 @@ $("#btn-busca").addEventListener("click", () => {
   if (abrir) $("#busca2").focus(); else onBusca("");
 });
 
-function medidas(p) { return (p.specs || []).find((s) => /^(medidas?|modelos)$/i.test(s[0])); }
+const REG_MED = /^(medidas?|modelos)$/i;
+const visivel = (p) => admin || !p.oculto;
+function medidas(p) { return (p.specs || []).find((s) => REG_MED.test(s[0])); }
 
 function renderGrade() {
   const g = $("#grade");
   const termo = norm(busca);
   const lista = termo
-    ? cat.produtos.filter((p) => norm([p.nome, p.nome2, (p.selos || []).join(" "), p.descricao, (p.specs || []).map((s) => s.join(" ")).join(" ")].join(" ")).includes(termo))
-    : cat.produtos.filter((p) => p.aba === aba);
+    ? cat.produtos.filter((p) => visivel(p) && norm([p.nome, p.nome2, (p.selos || []).join(" "), p.descricao, (p.specs || []).map((s) => s.join(" ")).join(" ")].join(" ")).includes(termo))
+    : cat.produtos.filter((p) => visivel(p) && p.aba === aba);
   const ab = cat.abas.find((a) => a.id === aba) || {};
   $("#titulo-grade").textContent = termo ? `Resultados para “${busca}”` : ab.nome || "";
   $("#sub-grade").textContent = lista.length ? `${lista.length} ${lista.length === 1 ? "modelo" : "modelos"}` : "";
@@ -379,21 +382,24 @@ function card(p, mostrarAba) {
   const tag = (p.selos || [])[1];
   const eyebrow = mostrarAba ? (cat.abas.find((a) => a.id === p.aba) || {}).nome : (p.selos || [])[0];
   const med = medidas(p);
-  const idx = cat.produtos.filter((x) => x.aba === p.aba);
+  const irmaos = cat.produtos.filter((x) => x.aba === p.aba);
+  const sq = "grid size-11 shrink-0 place-items-center rounded-xl border border-line bg-white transition active:scale-95 disabled:opacity-40";
   return h("article", { class: "relative animate-fade" },
-    h("button", { type: "button", onclick: () => abrirProduto(p.id), "aria-label": `${p.nome} ${p.nome2 || ""}, ver detalhes`,
-      class: "group block w-full overflow-hidden rounded-2xl bg-white text-left shadow-sm ring-1 ring-line transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[.985]" },
-      h("div", { class: "relative overflow-hidden" },
-        photo(p.fotos[0] || "", p.nome, "aspect-[4/5] w-full transition duration-500 group-hover:scale-[1.04]"),
-        tag ? h("span", { class: "absolute left-2.5 top-2.5 rounded-full bg-brand px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-ink shadow-sm" }, tag) : null),
-      h("div", { class: "p-3 sm:p-4" },
-        eyebrow ? h("p", { class: "text-[11px] font-bold uppercase tracking-wider text-brand-ink" }, eyebrow) : null,
-        h("h3", { class: "mt-0.5 text-[15px] font-extrabold leading-tight sm:text-base" }, p.nome, p.nome2 ? [" ", h("span", { class: "text-brand-ink" }, p.nome2)] : null),
-        med ? h("p", { class: "mt-1.5 line-clamp-1 text-xs text-muted sm:text-[13px]" }, med[1].replace(/\s*\([^)]*\)/g, "").replace(/\s*\/\s*/g, " · ")) : null)),
-    admin ? h("div", { class: "absolute right-2 top-2 flex flex-col gap-1.5" },
-      h("button", { type: "button", "aria-label": "Editar", onclick: () => editarProduto(p.id), class: C.close }, icon("pencil", "size-4")),
-      h("button", { type: "button", "aria-label": "Mover para antes", disabled: idx[0] === p, onclick: () => mover(p.id, -1), class: C.close + " disabled:opacity-40" }, icon("up2", "size-4")),
-      h("button", { type: "button", "aria-label": "Mover para depois", disabled: idx[idx.length - 1] === p, onclick: () => mover(p.id, 1), class: C.close + " disabled:opacity-40" }, icon("down2", "size-4"))) : null);
+    h("div", { class: p.oculto ? "opacity-60" : "" },
+      h("button", { type: "button", onclick: () => abrirProduto(p.id), "aria-label": `${p.nome} ${p.nome2 || ""}, ver detalhes`,
+        class: "group block w-full overflow-hidden rounded-2xl bg-white text-left shadow-sm ring-1 ring-line transition duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[.985]" },
+        h("div", { class: "relative overflow-hidden" },
+          photo(p.fotos[0] || "", p.nome, "aspect-[4/5] w-full transition duration-500 group-hover:scale-[1.04]"),
+          tag ? h("span", { class: "absolute left-2.5 top-2.5 rounded-full bg-brand px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-ink shadow-sm" }, tag) : null,
+          p.oculto ? h("span", { class: "absolute right-2.5 top-2.5 rounded-full bg-ink px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide text-white" }, "Oculto") : null),
+        h("div", { class: "p-3 sm:p-4" },
+          eyebrow ? h("p", { class: "text-[11px] font-bold uppercase tracking-wider text-brand-ink" }, eyebrow) : null,
+          h("h3", { class: "mt-0.5 text-[15px] font-extrabold leading-tight sm:text-base" }, p.nome, p.nome2 ? [" ", h("span", { class: "text-brand-ink" }, p.nome2)] : null),
+          med ? h("p", { class: "mt-1.5 line-clamp-1 text-xs text-muted sm:text-[13px]" }, med[1].replace(/\s*\([^)]*\)/g, "").replace(/\s*\/\s*/g, " · ")) : null))),
+    admin ? h("div", { class: "mt-2 flex gap-2" },
+      h("button", { type: "button", onclick: () => editarProduto(p.id), class: "inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-ink text-sm font-bold text-white transition active:scale-[.98]" }, icon("pencil", "size-4"), "Editar"),
+      h("button", { type: "button", "aria-label": "Mover para antes", disabled: irmaos[0] === p, onclick: () => mover(p.id, -1), class: sq }, icon("left", "size-4")),
+      h("button", { type: "button", "aria-label": "Mover para depois", disabled: irmaos[irmaos.length - 1] === p, onclick: () => mover(p.id, 1), class: sq }, icon("right", "size-4"))) : null);
 }
 
 /* ===== detalhe do produto ===== */
@@ -419,7 +425,7 @@ function galeria(p) {
 }
 
 function abrirProduto(id, semHistorico) {
-  const p = cat.produtos.find((x) => x.id === id); if (!p) return;
+  const p = cat.produtos.find((x) => x.id === id); if (!p || (p.oculto && !admin)) return;
   const dlg = $("#dlg-produto");
   const med = medidas(p);
   const tamanhos = med ? med[1].split(/\s*\/\s*/).filter(Boolean) : [];
@@ -525,7 +531,9 @@ window.addEventListener("popstate", () => {
 });
 
 /* ===== login ===== */
-$("#btn-entrar").onclick = () => { if (admin) return; $("#login-msg").textContent = ""; $("#dlg-login").showModal(); $("#senha").focus(); };
+function abrirLogin() { if (admin) return; $("#login-msg").textContent = ""; $("#dlg-login").showModal(); $("#senha").focus(); }
+$("#btn-entrar").onclick = abrirLogin;
+$("#ver-senha").addEventListener("change", (e) => { $("#senha").type = e.target.checked ? "text" : "password"; });
 $("#form-login").addEventListener("submit", async (e) => {
   e.preventDefault();
   const msg = $("#login-msg"); msg.textContent = "";
@@ -568,86 +576,159 @@ function cabecalhoEditor(titulo) {
     h("button", { type: "button", "data-fechar": "", "aria-label": "Fechar", class: "grid size-11 place-items-center rounded-full bg-paper" }, icon("x", "size-5")));
 }
 function parInputs(a, b, ph) {
-  const row = h("div", { class: "mb-2 grid grid-cols-[1fr_1.4fr_auto] gap-2" },
+  const row = h("div", { class: "mb-2 grid grid-cols-[1.15fr_1fr_auto] gap-2" },
     h("input", { value: a || "", placeholder: ph[0], "aria-label": ph[0], class: C.input }),
     h("input", { value: b || "", placeholder: ph[1], "aria-label": ph[1], class: C.input }),
     h("button", { type: "button", class: C.btn + " px-3", "aria-label": "Remover linha", onclick: () => row.remove() }, icon("x", "size-4")));
   return row;
 }
-function editarProduto(id) {
+/* modelos de ficha por categoria: a equipe só preenche os valores */
+const MODELOS = {
+  colchoes: { tamanhos: "Solteiro, Casal, Queen, King", specs: ["Tipo", "Altura", "Firmeza", "Tecnologia", "Observação"], selos: "Ex.: MOLAS, LANÇAMENTO" },
+  padrao: { tamanhos: "", specs: ["Tipo", "Materiais", "Cor", "Observação"], selos: "Ex.: ESPUMA, LANÇAMENTO" },
+};
+function modeloDaAba(abaId) {
+  const a = cat.abas.find((x) => x.id === abaId) || {};
+  if (norm(`${a.nome} ${a.id}`).includes("colch")) return MODELOS.colchoes;
+  const ult = [...cat.produtos].reverse().find((p) => p.aba === abaId && (p.specs || []).length);
+  if (ult) return { tamanhos: "", specs: ult.specs.filter((x) => !REG_MED.test(x[0])).map((x) => x[0]), selos: MODELOS.padrao.selos };
+  return MODELOS.padrao;
+}
+function secao(titulo, sub, aberto, ...filhos) {
+  return h("details", { open: aberto, class: "group mt-5 overflow-hidden rounded-2xl ring-1 ring-line" },
+    h("summary", { class: "flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-4 [&::-webkit-details-marker]:hidden" },
+      h("span", {}, h("span", { class: "block text-[15px] font-extrabold" }, titulo), sub ? h("span", { class: "block text-sm text-muted" }, sub) : null),
+      h("span", { class: "transition group-open:rotate-180" }, icon("down", "size-5"))),
+    h("div", { class: "px-4 pb-4" }, filhos));
+}
+function editarProduto(id, opts = {}) {
   const existente = id && cat.produtos.find((p) => p.id === id);
   const p = existente ? clone(existente) : { id: "", aba, nome: "", nome2: "", selos: [], descricao: "", destaques: [], specs: [], garantia: { rotulo: "Garantia", valor: "" }, etiqueta: { t: "", d: "" }, fotos: [] };
-  let fotos = [...p.fotos];
+  if (opts.duplicar) { p.id = ""; p.nome = `${p.nome} (cópia)`; }
+  const editando = !!existente && !opts.duplicar;
   const dlg = $("#dlg-editor");
+  let fotos = [...p.fotos], enviando = 0, modelo = modeloDaAba(p.aba);
+  const med = (p.specs || []).find((x) => REG_MED.test(x[0]));
+  const idxMed = med ? p.specs.indexOf(med) : 0;
+  const outras = (p.specs || []).filter((x) => !REG_MED.test(x[0]));
+  const msg = h("p", { class: "mt-2 min-h-5 text-sm font-medium", role: "status" });
+  const aviso = (t, tipo = "") => { msg.textContent = t; msg.className = "mt-2 min-h-5 text-sm font-medium " + (tipo === "erro" ? "text-red-700" : tipo === "ok" ? "text-emerald-700" : ""); };
+
   const f = {
-    nome: h("input", { value: p.nome, required: true, id: "e-nome", class: C.input }),
-    nome2: h("input", { value: p.nome2 || "", id: "e-nome2", placeholder: "Segunda linha (aparece em destaque)", class: C.input }),
+    nome: h("input", { value: p.nome, required: true, id: "e-nome", placeholder: "Ex.: Colchão de Molas Ensacadas", class: C.input }),
+    nome2: h("input", { value: p.nome2 || "", id: "e-nome2", placeholder: "Ex.: Premium (aparece em destaque)", class: C.input }),
     aba: h("select", { id: "e-aba", class: C.input }, cat.abas.map((a) => h("option", { value: a.id, selected: a.id === p.aba }, a.nome))),
-    selos: h("input", { value: (p.selos || []).join(", "), id: "e-selos", placeholder: "Ex.: ESPUMA, LANÇAMENTO", class: C.input }),
-    desc: h("textarea", { id: "e-desc", class: C.area }, p.descricao || ""),
+    tamanhos: h("input", { id: "e-tam", value: med ? med[1].split(/\s*\/\s*/).join(", ") : (editando ? "" : modelo.tamanhos), placeholder: "Ex.: Solteiro, Casal, Queen, King", class: C.input }),
+    desc: h("textarea", { id: "e-desc", placeholder: "Uma ou duas frases sobre o produto", class: C.area }, p.descricao || ""),
+    selos: h("input", { value: (p.selos || []).join(", "), id: "e-selos", placeholder: modelo.selos, class: C.input }),
     gr: h("input", { value: (p.garantia || {}).rotulo || "Garantia", "aria-label": "Rótulo da garantia", class: C.input }),
     gv: h("input", { value: (p.garantia || {}).valor || "", placeholder: "Ex.: 03 Meses", "aria-label": "Prazo da garantia", class: C.input }),
     et: h("input", { value: (p.etiqueta || {}).t || "", placeholder: "Título", "aria-label": "Título da etiqueta", class: C.input }),
     ed: h("input", { value: (p.etiqueta || {}).d || "", placeholder: "Subtítulo", "aria-label": "Subtítulo da etiqueta", class: C.input }),
+    mostrar: h("input", { type: "checkbox", id: "e-mostrar", checked: !p.oculto, class: "size-6 shrink-0 accent-ink" }),
   };
-  const dest = h("div"), specs = h("div"), fotosEl = h("div", { class: "my-2 flex flex-wrap gap-3" }), msg = h("p", { class: "mt-2 min-h-5 text-sm font-medium", role: "status" });
+  const dest = h("div"), specs = h("div");
   (p.destaques.length ? p.destaques : [{}, {}, {}, {}]).forEach((d) => dest.append(parInputs(d.t, d.d, ["Título", "Descrição curta"])));
-  (p.specs.length ? p.specs : [["Tipo", ""], ["Medidas", ""]]).forEach((s) => specs.append(parInputs(s[0], s[1], ["Campo", "Valor"])));
-  const mb = "grid size-9 place-items-center rounded-full disabled:opacity-30";
-  const pintaFotos = () => fotosEl.replaceChildren(...fotos.map((u, i) => h("div", { class: "w-28 overflow-hidden rounded-xl ring-1 ring-line" }, photo(u, `Foto ${i + 1}`, "h-28 w-full", true),
-    h("div", { class: "flex justify-between p-1" },
-      h("button", { type: "button", "aria-label": "Mover para esquerda", disabled: i === 0, class: mb, onclick: () => { [fotos[i - 1], fotos[i]] = [fotos[i], fotos[i - 1]]; pintaFotos(); } }, icon("left", "size-4")),
-      h("button", { type: "button", "aria-label": "Remover foto", class: mb + " text-red-700", onclick: () => { fotos.splice(i, 1); pintaFotos(); } }, icon("trash", "size-4")),
-      h("button", { type: "button", "aria-label": "Mover para direita", disabled: i === fotos.length - 1, class: mb, onclick: () => { [fotos[i + 1], fotos[i]] = [fotos[i], fotos[i + 1]]; pintaFotos(); } }, icon("right", "size-4"))))));
-  pintaFotos();
-  const arq = h("input", { type: "file", accept: "image/*", multiple: true, id: "e-arq", class: "block w-full text-sm file:mr-3 file:h-11 file:rounded-xl file:border-0 file:bg-ink file:px-4 file:font-semibold file:text-white", onchange: async () => {
-    msg.className = "mt-2 min-h-5 text-sm font-medium"; const marca = cat.empresa.marca || cat.empresa.nome || "";
-    for (const file of arq.files) {
+  (outras.length ? outras : editando ? [] : modelo.specs.map((k) => [k, ""])).forEach((x) => specs.append(parInputs(x[0], x[1], ["Campo", "Valor"])));
+  // ao trocar a categoria de um produto novo, a ficha acompanha o modelo dela
+  f.aba.addEventListener("change", () => {
+    if (editando) return;
+    const tamVazio = !f.tamanhos.value.trim() || f.tamanhos.value === modelo.tamanhos;
+    const specsVazias = [...specs.children].every((r) => !r.querySelectorAll("input")[1].value.trim());
+    if (!(tamVazio && specsVazias)) return;
+    modelo = modeloDaAba(f.aba.value);
+    f.tamanhos.value = modelo.tamanhos; f.selos.placeholder = modelo.selos;
+    specs.replaceChildren(...modelo.specs.map((k) => parInputs(k, "", ["Campo", "Valor"])));
+  });
+
+  /* fotos: toque em "Adicionar", escolha da galeria ou câmera */
+  const gradeFotos = h("div", { class: "mt-2 grid grid-cols-3 gap-3 sm:grid-cols-4" });
+  const mb = "grid size-10 place-items-center rounded-lg transition active:scale-95 disabled:opacity-30";
+  const arq = h("input", { type: "file", accept: "image/*", multiple: true, class: "sr-only", "aria-label": "Adicionar fotos", onchange: async () => {
+    const marca = cat.empresa.marca || cat.empresa.nome || "";
+    const arquivos = [...arq.files]; arq.value = "";
+    let erro = false;
+    enviando += arquivos.length; pintaFotos(); aviso("");
+    for (const file of arquivos) {
       try {
-        msg.textContent = `Enviando ${file.name}…`;
         const blob = await marcar(file, marca);
         const r = await api("upload", { method: "POST", headers: { "content-type": "image/jpeg" }, body: blob });
-        fotos.push(r.url); pintaFotos();
-      } catch (err) { msg.className = "mt-2 min-h-5 text-sm font-medium text-red-700"; msg.textContent = `${file.name}: ${err.message}`; return; }
+        fotos.push(r.url);
+      } catch (err) { erro = true; aviso(`${file.name}: ${err.message}`, "erro"); }
+      enviando--; pintaFotos();
     }
-    msg.className = "mt-2 min-h-5 text-sm font-medium text-emerald-700"; msg.textContent = "Fotos enviadas com a marca d'água."; arq.value = "";
+    if (!erro) aviso("Fotos enviadas com a marca d'água.", "ok");
   } });
-  const coleta = (box) => [...box.children].map((r) => [...r.querySelectorAll("input")].map((i) => i.value.trim())).filter((v) => v[0] || v[1]);
-  const form = h("form", { class: "px-5 md:px-8", onsubmit: async (ev) => {
+  function pintaFotos() {
+    gradeFotos.replaceChildren(
+      ...fotos.map((u, i) => h("div", { class: "overflow-hidden rounded-xl ring-1 ring-line" },
+        h("div", { class: "relative" }, photo(u, `Foto ${i + 1}`, "aspect-[4/5] w-full", true),
+          i === 0 ? h("span", { class: "absolute left-1.5 top-1.5 rounded-full bg-brand px-2 py-0.5 text-[10px] font-extrabold uppercase text-ink" }, "Capa") : null),
+        h("div", { class: "flex justify-between p-1" },
+          h("button", { type: "button", "aria-label": "Mover para esquerda", disabled: i === 0, class: mb, onclick: () => { [fotos[i - 1], fotos[i]] = [fotos[i], fotos[i - 1]]; pintaFotos(); } }, icon("left", "size-4")),
+          h("button", { type: "button", "aria-label": "Remover foto", class: mb + " text-red-700", onclick: () => { fotos.splice(i, 1); pintaFotos(); } }, icon("trash", "size-4")),
+          h("button", { type: "button", "aria-label": "Mover para direita", disabled: i === fotos.length - 1, class: mb, onclick: () => { [fotos[i + 1], fotos[i]] = [fotos[i], fotos[i + 1]]; pintaFotos(); } }, icon("right", "size-4"))))),
+      ...Array.from({ length: enviando }, () => h("div", { class: "grid aspect-[4/5] animate-pulse place-items-center rounded-xl bg-line text-xs font-bold text-muted" }, "Enviando…")),
+      h("label", { class: "grid aspect-[4/5] cursor-pointer place-items-center rounded-xl border-2 border-dashed border-ink/25 bg-paper p-2 text-center text-sm font-bold transition hover:border-ink/50 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-brand/40" },
+        h("span", { class: "grid justify-items-center gap-1" }, icon("plus", "size-7"), "Adicionar fotos"), arq));
+  }
+  pintaFotos();
+
+  const coleta = (box, obrigatorio) => [...box.children].map((r) => [...r.querySelectorAll("input")].map((i) => i.value.trim())).filter((v) => v[obrigatorio]);
+  async function enviar(ev) {
     ev.preventDefault();
+    if (enviando) return aviso("Aguarde as fotos terminarem de enviar.", "erro");
+    const depoisNovo = ev.submitter && ev.submitter.dataset.novo;
     const novo = clone(cat);
+    const tam = f.tamanhos.value.split(/[,/;]+/).map((t) => t.trim()).filter(Boolean);
+    const lista = coleta(specs, 1);
+    if (tam.length) lista.splice(Math.min(idxMed, lista.length), 0, [med ? med[0] : "Medidas", tam.join(" / ")]);
     const prod = {
       id: p.id || `${slug(f.nome.value + " " + f.nome2.value) || "produto"}-${Math.random().toString(36).slice(2, 6)}`,
       aba: f.aba.value, nome: f.nome.value.trim(), nome2: f.nome2.value.trim(),
-      selos: f.selos.value.split(",").map((s) => s.trim()).filter(Boolean).slice(0, 4),
+      selos: f.selos.value.split(",").map((t) => t.trim()).filter(Boolean).slice(0, 4),
       descricao: f.desc.value.trim(),
-      destaques: coleta(dest).map((v) => ({ t: v[0], d: v[1] })),
-      specs: coleta(specs), garantia: { rotulo: f.gr.value.trim() || "Garantia", valor: f.gv.value.trim(), ...((p.garantia || {}).destaque ? { destaque: true } : {}) },
+      destaques: coleta(dest, 0).map((v) => ({ t: v[0], d: v[1] })),
+      specs: lista, garantia: { rotulo: f.gr.value.trim() || "Garantia", valor: f.gv.value.trim(), ...((p.garantia || {}).destaque ? { destaque: true } : {}) },
       etiqueta: { t: f.et.value.trim(), d: f.ed.value.trim() }, fotos,
+      ...(f.mostrar.checked ? {} : { oculto: true }),
     };
     const i = novo.produtos.findIndex((x) => x.id === prod.id);
     if (i >= 0) novo.produtos[i] = prod; else novo.produtos.push(prod);
-    try { msg.textContent = "Salvando…"; await salvar(novo); aba = prod.aba; dlg.close(); render(); toast("Salvo"); }
-    catch (err) { msg.className = "mt-2 min-h-5 text-sm font-medium text-red-700"; msg.textContent = err.message; }
-  } },
-    h("label", { for: "e-nome", class: C.label }, "Nome"), f.nome, h("label", { for: "e-nome2", class: C.label }, "Nome (segunda linha)"), f.nome2,
-    h("label", { for: "e-aba", class: C.label }, "Aba"), f.aba,
-    h("label", { for: "e-selos", class: C.label }, "Selos (separados por vírgula; o 2º vira destaque no card)"), f.selos,
+    try {
+      aviso("Salvando…"); await salvar(novo); aba = prod.aba; dlg.close(); render();
+      toast(prod.oculto ? "Salvo como oculto" : "Produto salvo");
+      if (depoisNovo) editarProduto(null);
+    } catch (err) { aviso(err.message, "erro"); }
+  }
+  async function excluir() {
+    if (!confirm(`Excluir "${p.nome}"? Isso não pode ser desfeito.`)) return;
+    const novo = clone(cat); novo.produtos = novo.produtos.filter((x) => x.id !== p.id);
+    try { await salvar(novo); dlg.close(); render(); toast("Produto excluído"); } catch (err) { aviso(err.message, "erro"); }
+  }
+
+  const form = h("form", { class: "px-5 pb-6 md:px-8", onsubmit: enviar },
+    h("p", { class: C.label }, "Fotos ", h("span", { class: "font-medium text-muted" }, "(a primeira é a capa)")), gradeFotos, msg,
+    h("label", { for: "e-nome", class: C.label }, "Nome"), f.nome,
+    h("label", { for: "e-nome2", class: C.label }, "Complemento do nome ", h("span", { class: "font-medium text-muted" }, "(opcional)")), f.nome2,
+    h("label", { for: "e-aba", class: C.label }, "Categoria"), f.aba,
+    h("label", { for: "e-tam", class: C.label }, "Tamanhos ", h("span", { class: "font-medium text-muted" }, "(separe com vírgula; vira botões de escolha)")), f.tamanhos,
     h("label", { for: "e-desc", class: C.label }, "Descrição"), f.desc,
-    h("p", { class: C.label }, "Destaques"), dest, h("button", { type: "button", class: C.btn, onclick: () => dest.append(parInputs("", "", ["Título", "Descrição curta"])) }, icon("plus", "size-4"), "Destaque"),
-    h("p", { class: C.label }, "Especificações técnicas (o campo “Medidas” cria os botões de tamanho)"), specs, h("button", { type: "button", class: C.btn, onclick: () => specs.append(parInputs("", "", ["Campo", "Valor"])) }, icon("plus", "size-4"), "Campo"),
-    h("p", { class: C.label }, "Garantia"), h("div", { class: "grid grid-cols-2 gap-2" }, f.gr, f.gv),
-    h("p", { class: C.label }, "Etiqueta sobre a foto"), h("div", { class: "grid grid-cols-2 gap-2" }, f.et, f.ed),
-    h("label", { for: "e-arq", class: C.label }, "Fotos (a marca d'água é aplicada automaticamente)"), fotosEl, arq, msg,
-    h("div", { class: "sticky bottom-0 -mx-5 mt-8 flex flex-wrap gap-2 border-t border-line bg-white/95 px-5 py-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur md:-mx-8 md:px-8" },
+    h("label", { for: "e-mostrar", class: "mt-5 flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-2xl bg-paper px-4 py-3" },
+      h("span", {}, h("span", { class: "block text-[15px] font-extrabold" }, "Mostrar no catálogo"), h("span", { class: "block text-sm text-muted" }, "Desligue para guardar como rascunho; só a equipe vê")), f.mostrar),
+    secao("Destaques", "As 4 vantagens do produto", false, dest, h("button", { type: "button", class: C.btn + " mt-1", onclick: () => dest.append(parInputs("", "", ["Título", "Descrição curta"])) }, icon("plus", "size-4"), "Destaque")),
+    secao("Especificações técnicas", "Altura, firmeza, material, cor...", false, specs, h("button", { type: "button", class: C.btn + " mt-1", onclick: () => specs.append(parInputs("", "", ["Campo", "Valor"])) }, icon("plus", "size-4"), "Campo")),
+    secao("Selos, garantia e etiqueta", "Detalhes opcionais", false,
+      h("label", { for: "e-selos", class: C.label }, "Selos (o 2º aparece em destaque no card)"), f.selos,
+      h("p", { class: C.label }, "Garantia"), h("div", { class: "grid grid-cols-2 gap-2" }, f.gr, f.gv),
+      h("p", { class: C.label }, "Etiqueta sobre a foto"), h("div", { class: "grid grid-cols-2 gap-2" }, f.et, f.ed)),
+    editando ? h("div", { class: "mt-6 grid gap-2 border-t border-line pt-5" },
+      h("button", { type: "button", class: C.btn, onclick: () => { dlg.close(); editarProduto(p.id, { duplicar: true }); } }, icon("plus", "size-4"), "Duplicar este produto"),
+      h("button", { type: "button", class: C.danger, onclick: excluir }, icon("trash", "size-4"), "Excluir produto")) : null,
+    h("div", { class: "sticky bottom-0 -mx-5 mt-6 flex gap-2 border-t border-line bg-white/95 px-5 py-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur md:-mx-8 md:px-8" },
       h("button", { class: C.pri, type: "submit" }, "Salvar"),
-      h("button", { class: C.btn, type: "button", "data-fechar": "" }, "Cancelar"),
-      existente ? h("button", { class: C.danger, type: "button", "aria-label": "Excluir produto", onclick: async () => {
-        if (!confirm(`Excluir "${p.nome}"?`)) return;
-        const novo = clone(cat); novo.produtos = novo.produtos.filter((x) => x.id !== p.id);
-        try { await salvar(novo); dlg.close(); render(); toast("Excluído"); } catch (err) { msg.className = "mt-2 min-h-5 text-sm font-medium text-red-700"; msg.textContent = err.message; }
-      } }, icon("trash", "size-4"), "Excluir") : null));
-  dlg.replaceChildren(h("div", { class: "px-5 pt-0 md:px-8" }, cabecalhoEditor(existente ? "Editar produto" : "Novo produto")), form);
+      !editando ? h("button", { class: C.btn + " flex-1", type: "submit", "data-novo": "1" }, "Salvar e novo") : null));
+  dlg.replaceChildren(h("div", { class: "px-5 md:px-8" }, cabecalhoEditor(editando ? "Editar produto" : opts.duplicar ? "Duplicar produto" : "Novo produto")), form);
   dlg.scrollTop = 0; dlg.showModal();
 }
 
@@ -718,6 +799,7 @@ function esqueleto() {
     const hash = decodeURIComponent(location.hash.slice(1));
     aba = cat.abas.some((a) => a.id === hash) ? hash : null;
     render();
+    if (hash === "admin") { history.replaceState(null, "", location.pathname); abrirLogin(); }
     const m = hash.match(/^produto\/(.+)$/);
     if (m) abrirProduto(m[1], true);
   } catch (err) {

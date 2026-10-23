@@ -16,6 +16,19 @@ e painel de edição protegido por senha. Hospedagem: **Cloudflare Pages** (plan
 Depois do primeiro "Salvar" no painel, o catálogo passa a viver no **KV** e as fotos novas também no **KV** (sem cartão de crédito). Se um dia quiser, ligue um bucket **R2** com o nome `FOTOS` e as fotos novas passam a ir para ele.
 O `seed/` só é usado enquanto o KV estiver vazio.
 
+## Como editar o catálogo (equipe)
+
+1. Abra o site e vá em `/#admin` (ou role até o rodapé e toque em **Área restrita**). Digite a senha.
+2. Aparece a barra escura **Edição** na parte de baixo: **+ Produto**, **Empresa** (nome, WhatsApp, cor, categorias) e **Sair**.
+3. Nos cards aparece o botão **Editar** e as setas para mudar a ordem.
+4. No produto: toque em **Adicionar fotos** (galeria ou câmera). A marca d'água é aplicada sozinha. A primeira foto é a capa.
+5. **Tamanhos**: separe com vírgula (ex.: `Solteiro, Casal, Queen, King`). Eles viram botões de escolha no produto e entram na mensagem do WhatsApp.
+6. **Mostrar no catálogo** desligado deixa o produto como rascunho: só a equipe logada vê. Bom para preparar tudo antes de publicar.
+7. **Salvar e novo** cadastra vários produtos seguidos. **Duplicar** copia um produto parecido.
+
+Cada categoria tem um modelo de ficha: em **Colchões** os campos já vêm como Tipo, Altura, Firmeza, Tecnologia e
+Observação, e os tamanhos como Solteiro, Casal, Queen, King.
+
 ## Visual (Tailwind)
 
 O visual usa Tailwind CSS v4, já compilado em `public/app.css` (arquivo que vai para o GitHub). Por isso a

@@ -105,7 +105,10 @@ export async function onRequest({ request, env, params }) {
   try {
     if (route === "catalog" && method === "GET") {
       const stored = await env.CATALOG.get("catalog", "json");
-      return json(stored || (await seedCatalog(env, url)));
+      const c = stored || (await seedCatalog(env, url));
+      // Produtos marcados como ocultos (rascunho) só saem do servidor para a equipe logada.
+      if (!(await isAdmin(request, env))) c.produtos = (c.produtos || []).filter((p) => !p.oculto);
+      return json(c);
     }
 
     if (route === "me" && method === "GET") return json({ admin: await isAdmin(request, env) });
