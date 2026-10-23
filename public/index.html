@@ -12,8 +12,8 @@
 <body class="bg-paper font-sans text-ink antialiased">
 <a href="#catalogo" class="sr-only rounded-lg bg-white px-4 py-2 font-semibold focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100]">Ir para os produtos</a>
 
-<header class="bg-white">
-  <div class="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4">
+<header class="bg-white pt-[env(safe-area-inset-top)]">
+  <div class="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 md:h-16">
     <a href="#" id="marca" class="flex min-h-11 min-w-0 items-center gap-2.5 text-lg font-extrabold tracking-tight"></a>
     <div class="relative ml-auto hidden w-72 md:block">
       <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" id="ico-busca"></span>
@@ -30,26 +30,26 @@
   </div>
 </header>
 
-<section class="mx-auto max-w-6xl px-4 pt-3 md:pt-6" aria-labelledby="hero-titulo">
-  <div class="relative isolate flex min-h-[23rem] items-end overflow-hidden rounded-3xl bg-ink text-white md:min-h-[28rem]">
+<section class="mx-auto max-w-6xl px-4 pt-2 md:pt-6" aria-labelledby="hero-titulo">
+  <div class="relative isolate flex min-h-40 items-end overflow-hidden rounded-2xl bg-ink text-white md:min-h-[28rem] md:rounded-3xl">
     <div id="hero-foto" class="photo absolute inset-0 -z-20 opacity-80"></div>
     <div class="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/5 md:bg-gradient-to-r md:from-ink md:via-ink/60 md:to-transparent"></div>
-    <div class="w-full max-w-2xl p-5 md:p-12">
-      <p id="hero-eyebrow" class="inline-flex max-w-full text-balance items-center gap-2 rounded-2xl bg-white/12 px-3 py-1.5 text-xs font-semibold leading-snug backdrop-blur"></p>
-      <h1 id="hero-titulo" class="mt-3 text-balance text-[1.9rem] font-extrabold leading-[1.05] tracking-tight md:text-5xl"></h1>
-      <p id="hero-desc" class="mt-3 line-clamp-2 max-w-xl text-[15px] leading-relaxed text-white/80 md:line-clamp-none md:text-base"></p>
-      <div class="mt-6 flex flex-wrap items-center gap-2 sm:gap-3">
-        <a href="#catalogo" class="inline-flex h-12 min-w-fit flex-1 items-center justify-center whitespace-nowrap rounded-full bg-white px-4 text-[15px] font-bold text-ink transition hover:bg-brand-soft active:scale-[.98] sm:flex-none sm:px-6">Ver produtos</a>
-        <div id="zap-hero" class="min-w-fit flex-1 sm:flex-none [&>div]:w-full [&_a]:w-full [&_button]:w-full sm:[&>div]:w-auto sm:[&_a]:w-auto sm:[&_button]:w-auto"></div>
+    <div class="w-full max-w-2xl p-4 md:p-12">
+      <p id="hero-eyebrow" class="hidden max-w-full text-balance items-center gap-2 rounded-2xl bg-white/12 px-3 py-1.5 text-xs font-semibold leading-snug backdrop-blur md:inline-flex"></p>
+      <h1 id="hero-titulo" class="text-balance text-xl font-extrabold leading-tight tracking-tight md:mt-4 md:text-5xl md:leading-[1.05]"></h1>
+      <p id="hero-desc" class="mt-3 hidden max-w-xl text-base leading-relaxed text-white/80 md:block"></p>
+      <div class="mt-6 hidden flex-wrap items-center gap-3 md:flex">
+        <a href="#catalogo" class="inline-flex h-12 items-center justify-center whitespace-nowrap rounded-full bg-white px-6 text-[15px] font-bold text-ink transition hover:bg-brand-soft active:scale-[.98]">Ver produtos</a>
+        <div id="zap-hero"></div>
       </div>
-      <ul id="hero-prova" class="mt-5 hidden flex-wrap gap-x-5 gap-y-2 text-[13px] font-medium text-white/80 sm:flex"></ul>
+      <ul id="hero-prova" class="mt-5 hidden flex-wrap gap-x-5 gap-y-2 text-[13px] font-medium text-white/80 md:flex"></ul>
     </div>
   </div>
 </section>
 
-<nav id="barra" class="sticky top-0 z-30 mt-5 bg-paper/90 backdrop-blur-md" aria-label="Categorias">
-  <div class="mx-auto max-w-6xl px-4 py-3">
-    <div id="abas" role="tablist" class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4"></div>
+<nav id="barra" class="sticky top-0 z-30 mt-3 bg-paper/90 pt-[env(safe-area-inset-top)] backdrop-blur-md md:mt-5" aria-label="Categorias">
+  <div class="mx-auto max-w-6xl px-4 py-2 md:py-3">
+    <div id="abas" role="tablist" class="no-scrollbar -mx-4 flex scroll-px-4 gap-2 overflow-x-auto scroll-smooth overscroll-x-contain px-4"></div>
   </div>
 </nav>
 
@@ -77,7 +77,11 @@
   </div>
 </footer>
 
-<div id="fab" class="fixed bottom-4 right-4 z-30 transition-all"></div>
+<div id="fab" class="fixed bottom-4 right-4 z-30 hidden md:block"></div>
+<div id="barra-zap" class="fixed inset-x-0 bottom-0 z-30 hidden border-t border-line bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden"></div>
+
+<dialog id="dlg-zap" aria-label="Escolher número de WhatsApp"
+  class="m-0 mt-auto w-full max-w-none rounded-t-3xl bg-white p-0 text-ink backdrop:bg-ink/60 open:animate-sheet md:m-auto md:max-w-sm md:rounded-3xl md:shadow-2xl md:open:animate-pop"></dialog>
 
 <dialog id="dlg-produto" aria-label="Detalhes do produto"
   class="m-0 mt-auto max-h-[94dvh] w-full max-w-none overflow-y-auto overscroll-contain rounded-t-3xl bg-white p-0 text-ink shadow-2xl backdrop:bg-ink/60 backdrop:backdrop-blur-sm open:animate-sheet md:m-auto md:h-[min(44rem,92dvh)] md:max-h-[92dvh] md:max-w-5xl md:overflow-hidden md:rounded-3xl md:open:animate-pop"></dialog>
@@ -168,7 +172,7 @@ const C = {
   btn: "inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-line bg-white px-5 text-sm font-semibold transition hover:bg-paper active:scale-[.98] disabled:opacity-40",
   pri: "inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-ink px-6 text-sm font-bold text-white transition hover:bg-ink/90 active:scale-[.98]",
   danger: "inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-red-200 px-5 text-sm font-semibold text-red-700 transition hover:bg-red-50 active:scale-[.98]",
-  wa: "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-wa px-6 text-[15px] font-bold text-white shadow-lg shadow-wa/25 transition hover:bg-wa-dark active:scale-[.98]",
+  wa: "inline-flex items-center justify-center gap-2 rounded-full bg-wa px-6 text-[15px] font-bold text-white shadow-lg shadow-wa/25 transition hover:bg-wa-dark active:scale-[.98]",
   close: "grid size-11 place-items-center rounded-full bg-white/95 text-ink shadow-md ring-1 ring-black/5 backdrop-blur transition hover:bg-white active:scale-95",
 };
 
@@ -193,13 +197,20 @@ function setMarcaSvg(texto) {
 document.addEventListener("contextmenu", (e) => { if (e.target.closest(".photo")) e.preventDefault(); });
 document.addEventListener("dragstart", (e) => { if (e.target.closest(".photo")) e.preventDefault(); });
 
+function carregaFoto(el) {
+  const im = new Image();
+  im.onload = () => { el.style.backgroundImage = `url("${el.dataset.src}")`; el.removeAttribute("data-loading"); };
+  im.onerror = () => el.removeAttribute("data-loading");
+  im.src = el.dataset.src;
+}
 const io = "IntersectionObserver" in window ? new IntersectionObserver((es) => {
-  es.forEach((en) => { if (en.isIntersecting) { en.target.style.backgroundImage = `url("${en.target.dataset.src}")`; io.unobserve(en.target); } });
+  es.forEach((en) => { if (en.isIntersecting) { carregaFoto(en.target); io.unobserve(en.target); } });
 }, { rootMargin: "400px" }) : null;
 function photo(url, label, cls = "", eager = false) {
   const p = h("div", { class: "photo " + cls, role: "img", "aria-label": label || "Foto do produto", "data-src": url });
   if (!url) return p;
-  if (io && !eager) io.observe(p); else p.style.backgroundImage = `url("${url}")`;
+  p.setAttribute("data-loading", "");
+  if (io && !eager) io.observe(p); else carregaFoto(p);
   return p;
 }
 
@@ -234,35 +245,39 @@ const zaps = () => (cat.empresa.whatsapps || []).map((n) => String(n).replace(/\
 const fmtZap = (n) => { const l = n.replace(/^55/, ""); return l.length === 11 ? `(${l.slice(0, 2)}) ${l.slice(2, 7)}-${l.slice(7)}` : l.length === 10 ? `(${l.slice(0, 2)}) ${l.slice(2, 6)}-${l.slice(6)}` : n; };
 const msgPadrao = () => `Olá! Vim pelo catálogo da ${cat.empresa.nome} e gostaria de atendimento.`;
 
-function zapButton({ label = "Chamar no WhatsApp", msg = msgPadrao, cls, up = true, wrap = "", soIcone = false }) {
+const LABEL_CTA = "Falar com vendedor no WhatsApp";
+function zapButton({ label = LABEL_CTA, msg = msgPadrao, cls, wrap = "", soIcone = false }) {
   const nums = zaps();
   if (!nums.length) return null;
-  const url = (n) => `https://wa.me/${n}?text=${encodeURIComponent(msg())}`;
-  const content = soIcone ? [icon("wa", "size-7"), h("span", { class: "sr-only" }, label)] : [icon("wa", "size-5"), label];
+  const content = soIcone ? [icon("wa", "size-7"), h("span", { class: "sr-only" }, label)]
+    : [icon("wa", "size-5"), h("span", { class: "text-center leading-tight" }, label)];
   if (nums.length === 1) {
-    return h("div", { class: wrap }, h("a", { class: cls, href: url(nums[0]), target: "_blank", rel: "noopener",
-      onclick: (e) => { e.currentTarget.href = url(nums[0]); } }, content));
+    const url = () => `https://wa.me/${nums[0]}?text=${encodeURIComponent(msg())}`;
+    return h("div", { class: wrap }, h("a", { class: cls, href: url(), target: "_blank", rel: "noopener",
+      onclick: (e) => { e.currentTarget.href = url(); } }, content));
   }
-  const pop = h("div", { "data-zap-pop": "", hidden: true, role: "menu",
-    class: `absolute right-0 z-50 w-72 max-w-[calc(100vw-2rem)] rounded-2xl bg-white p-2 text-ink shadow-2xl ring-1 ring-line animate-pop ${up ? "bottom-full mb-2" : "top-full mt-2"}` },
-    h("p", { class: "px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-muted" }, "Escolha um número"),
-    nums.map((n) => h("a", { role: "menuitem", href: url(n), target: "_blank", rel: "noopener",
-      class: "flex h-14 items-center gap-3 rounded-xl px-3 transition hover:bg-paper active:bg-paper",
-      onclick: (e) => { e.currentTarget.href = url(n); pop.hidden = true; btn.setAttribute("aria-expanded", "false"); } },
-      h("span", { class: "grid size-9 place-items-center rounded-full bg-wa text-white" }, icon("wa", "size-5")),
-      h("span", { class: "text-[15px] font-bold" }, fmtZap(n)))));
-  const btn = h("button", { type: "button", class: cls, "aria-haspopup": "menu", "aria-expanded": "false",
-    onclick: () => { const abrir = pop.hidden; closeZapPops(); pop.hidden = !abrir; btn.setAttribute("aria-expanded", String(abrir)); } }, content, soIcone ? null : icon("down", "size-4"));
-  return h("div", { class: "relative " + wrap }, btn, pop);
+  return h("div", { class: wrap }, h("button", { type: "button", class: cls, "aria-haspopup": "dialog", onclick: () => abrirGaveta(msg) }, content));
 }
-function closeZapPops() {
-  document.querySelectorAll("[data-zap-pop]").forEach((p) => { p.hidden = true; p.previousElementSibling && p.previousElementSibling.setAttribute("aria-expanded", "false"); });
+/* gaveta: aparece só quando há mais de um número (Lei de Hick) */
+function abrirGaveta(msg) {
+  const dlg = $("#dlg-zap");
+  const url = (n) => `https://wa.me/${n}?text=${encodeURIComponent(msg())}`;
+  dlg.replaceChildren(h("div", { class: "p-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:p-6" },
+    h("div", { class: "mx-auto mb-3 h-1.5 w-10 rounded-full bg-line md:hidden" }),
+    h("div", { class: "flex items-start justify-between gap-3" },
+      h("div", {}, h("h2", { class: "text-xl font-extrabold" }, "Falar com vendedor"),
+        h("p", { class: "mt-1 text-[15px] text-muted" }, "Escolha com qual número quer conversar.")),
+      h("button", { type: "button", "data-fechar": "", "aria-label": "Fechar", class: "grid size-11 shrink-0 place-items-center rounded-full bg-paper" }, icon("x", "size-5"))),
+    h("div", { class: "mt-4 grid gap-2" }, zaps().map((n, i) => h("a", { href: url(n), target: "_blank", rel: "noopener",
+      class: "flex min-h-16 items-center gap-3 rounded-2xl bg-paper px-4 transition active:scale-[.98]",
+      onclick: (e) => { e.currentTarget.href = url(n); setTimeout(() => dlg.close(), 50); } },
+      h("span", { class: "grid size-10 shrink-0 place-items-center rounded-full bg-wa text-white" }, icon("wa", "size-5")),
+      h("span", {}, h("span", { class: "block text-lg font-extrabold leading-tight" }, fmtZap(n)), h("span", { class: "block text-sm text-muted" }, `WhatsApp ${i + 1}`)))))));
+  dlg.showModal();
 }
-document.addEventListener("click", (e) => { if (!e.target.closest("[data-zap-pop]") && !e.target.closest("[aria-haspopup=menu]")) closeZapPops(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeZapPops(); });
 
 /* ===== render do catálogo ===== */
-const CTA_PILL = C.wa;
+const CTA_PILL = C.wa + " h-12";
 const CTA_GHOST = "inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/35 bg-white/10 px-4 text-[15px] sm:px-6 font-bold text-white backdrop-blur transition hover:bg-white/20 active:scale-[.98]";
 const CTA_SMALL = "inline-flex h-11 items-center justify-center gap-2 rounded-full bg-wa px-5 text-sm font-bold text-white transition hover:bg-wa-dark active:scale-[.98]";
 
@@ -276,14 +291,14 @@ function render() {
     h("span", { class: "truncate" }, e.nome || "Catálogo"));
   $("#ico-busca").replaceChildren(icon("search", "size-5"));
   $("#btn-busca").replaceChildren(icon("search", "size-6"));
-  $("#zap-topo").replaceChildren(...[zapButton({ label: "WhatsApp", cls: CTA_SMALL, up: false, wrap: "" })].filter(Boolean));
+  $("#zap-topo").replaceChildren(...[zapButton({ label: "WhatsApp", cls: CTA_SMALL })].filter(Boolean));
 
   const capa = e.capa || ((cat.produtos.find((p) => p.fotos[0]) || { fotos: [] }).fotos[0]);
   const hf = $("#hero-foto"); if (capa) hf.style.backgroundImage = `url("${capa}")`;
   $("#hero-eyebrow").replaceChildren(icon("star", "size-3.5"), e.destaque || `Catálogo ${e.nome || ""}`);
   $("#hero-titulo").textContent = e.slogan || "Nossos produtos";
   $("#hero-desc").textContent = e.descricao || "";
-  $("#zap-hero").replaceChildren(...[zapButton({ label: "WhatsApp", cls: CTA_GHOST, up: true })].filter(Boolean));
+  $("#zap-hero").replaceChildren(...[zapButton({ label: "WhatsApp", cls: CTA_GHOST })].filter(Boolean));
   const prova = (e.rodape || "").split("•").map((s) => s.trim()).filter(Boolean);
   $("#hero-prova").replaceChildren(...prova.map((t) => h("li", { class: "flex items-center gap-1.5" }, icon("check", "size-4 text-brand"), t)));
 
@@ -295,9 +310,12 @@ function render() {
   $("#copy").textContent = `© ${new Date().getFullYear()} ${e.nome || ""}`;
   $("#login-x").replaceChildren(icon("x", "size-5"));
 
-  const fab = zapButton({ label: "Chamar no WhatsApp", cls: "grid size-14 place-items-center rounded-full bg-wa text-white shadow-xl shadow-black/25 transition hover:bg-wa-dark active:scale-95", up: true, soIcone: true });
+  const fab = zapButton({ label: LABEL_CTA, cls: "grid size-14 place-items-center rounded-full bg-wa text-white shadow-xl shadow-black/25 transition hover:bg-wa-dark active:scale-95", soIcone: true });
   $("#fab").replaceChildren(...(fab ? [fab] : []));
   $("#fab").classList.toggle("bottom-24", admin); $("#fab").classList.toggle("bottom-4", !admin);
+  const barra = zapButton({ cls: C.wa + " h-14 w-full" });
+  $("#barra-zap").replaceChildren(...(barra ? [barra] : []));
+  $("#barra-zap").classList.toggle("hidden", !barra || admin);
 
   if (!cat.abas.some((a) => a.id === aba)) aba = (cat.abas[0] || {}).id;
   renderAbas(); renderGrade(); renderAdminBar();
@@ -309,7 +327,7 @@ function renderAbas() {
     const sel = a.id === aba && !busca;
     return h("button", { type: "button", role: "tab", id: "aba-" + a.id, "aria-selected": String(sel), tabindex: sel ? "0" : "-1",
       class: `inline-flex h-11 shrink-0 items-center gap-2 rounded-full border px-5 text-[15px] font-semibold transition active:scale-[.97] ${sel ? "border-ink bg-ink text-white" : "border-line bg-white text-ink hover:border-ink/30"}`,
-      onclick: () => { aba = a.id; limpaBusca(); history.replaceState(history.state, "", "#" + a.id); renderAbas(); renderGrade(); } },
+      onclick: () => { aba = a.id; limpaBusca(); history.replaceState(history.state, "", "#" + a.id); renderAbas(); renderGrade(); const sel = $("#abas [aria-selected=true]"); sel && sel.scrollIntoView({ inline: "center", block: "nearest" }); } },
       a.nome, h("span", { class: `rounded-full px-2 py-0.5 text-xs ${sel ? "bg-white/20" : "bg-paper text-muted"}` }, String(n)));
   }));
 }
@@ -344,7 +362,7 @@ function renderGrade() {
   $("#sub-grade").textContent = lista.length ? `${lista.length} ${lista.length === 1 ? "modelo" : "modelos"}` : "";
 
   if (!lista.length) {
-    const z = zapButton({ label: "Perguntar no WhatsApp", cls: CTA_PILL, up: true, wrap: "mt-5 inline-block" });
+    const z = zapButton({ label: "Perguntar no WhatsApp", cls: CTA_PILL, wrap: "mt-5 inline-block" });
     g.replaceChildren(h("div", { class: "col-span-full grid place-items-center rounded-3xl bg-white px-6 py-16 text-center ring-1 ring-line" },
       h("div", { class: "grid size-14 place-items-center rounded-full bg-brand-soft text-brand-ink" }, icon("moon", "size-7")),
       h("h3", { class: "mt-4 text-xl font-extrabold" }, termo ? "Nada encontrado" : "Em breve por aqui"),
@@ -388,7 +406,9 @@ function galeria(p) {
   if (fotos.length > 1) {
     const dots = h("div", { class: "pointer-events-none absolute bottom-5 right-4 flex gap-1.5 rounded-full bg-black/35 px-2.5 py-1.5 backdrop-blur" },
       fotos.map((_, i) => h("span", { class: "size-1.5 rounded-full bg-white transition " + (i ? "opacity-50" : "") })));
-    track.addEventListener("scroll", () => { const i = Math.round(track.scrollLeft / track.clientWidth); [...dots.children].forEach((d, k) => d.classList.toggle("opacity-50", k !== i)); }, { passive: true });
+    const cont = h("span", { class: "pointer-events-none absolute left-4 top-4 rounded-full bg-black/45 px-2.5 py-1 text-xs font-bold text-white backdrop-blur" }, `1 / ${fotos.length}`);
+    wrap.append(cont);
+    track.addEventListener("scroll", () => { const i = Math.round(track.scrollLeft / track.clientWidth); cont.textContent = `${i + 1} / ${fotos.length}`; [...dots.children].forEach((d, k) => d.classList.toggle("opacity-50", k !== i)); }, { passive: true });
     const seta = (dir, nome, pos) => h("button", { type: "button", "aria-label": nome, onclick: () => track.scrollBy({ left: dir * track.clientWidth, behavior: "smooth" }),
       class: `absolute top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-md transition hover:bg-white md:grid ${pos}` }, icon(dir > 0 ? "right" : "left", "size-5"));
     wrap.append(dots, seta(-1, "Foto anterior", "left-3"), seta(1, "Próxima foto", "right-3"));
@@ -406,24 +426,24 @@ function abrirProduto(id, semHistorico) {
   const msg = () => `Olá! Tenho interesse no *${nomeCompleto}*${tam ? ` (${tam})` : ""}. Pode me passar valores e prazo de entrega?\n${location.origin}/#produto/${p.id}`;
 
   const chipsTam = tamanhos.length > 1 ? h("div", { class: "mt-6" },
-    h("p", { class: "mb-2 text-sm font-bold" }, "Escolha o tamanho ", h("span", { class: "font-medium text-muted" }, "(opcional)")),
+    h("p", { class: "mb-2 text-[15px] font-bold" }, "Escolha o tamanho ", h("span", { class: "font-medium text-muted" }, "(opcional)")),
     h("div", { role: "radiogroup", "aria-label": "Tamanho", class: "flex flex-wrap gap-2" },
       tamanhos.map((t) => {
         const b = h("button", { type: "button", role: "radio", "aria-checked": "false",
-          class: "min-h-11 rounded-full border border-line bg-white px-4 text-sm font-semibold transition active:scale-[.97]",
+          class: "min-h-12 rounded-full border border-line bg-white px-4 text-[15px] font-semibold transition active:scale-[.97]",
           onclick: () => {
             tam = tam === t ? null : t;
             b.parentElement.querySelectorAll("button").forEach((x) => {
               const on = x === b && tam;
               x.setAttribute("aria-checked", String(!!on));
-              x.className = `min-h-11 rounded-full border px-4 text-sm font-semibold transition active:scale-[.97] ${on ? "border-ink bg-ink text-white" : "border-line bg-white"}`;
+              x.className = `min-h-12 rounded-full border px-4 text-[15px] font-semibold transition active:scale-[.97] ${on ? "border-ink bg-ink text-white" : "border-line bg-white"}`;
             });
           } }, t);
         return b;
       }))) : null;
 
   const g = p.garantia || {};
-  const zap = zapButton({ label: "Chamar no WhatsApp", msg, cls: C.wa + " h-14 w-full", up: true, wrap: "min-w-0 flex-1" });
+  const zap = zapButton({ msg, cls: C.wa + " h-14 w-full", wrap: "min-w-0 flex-1" });
   const partilhar = async () => {
     const url = `${location.origin}/#produto/${p.id}`;
     try { if (navigator.share) { await navigator.share({ title: nomeCompleto, url }); return; } } catch (_) { return; }
@@ -434,30 +454,54 @@ function abrirProduto(id, semHistorico) {
     h("div", { class: "p-5 pb-6 md:p-8" },
       h("div", { class: "flex flex-wrap gap-1.5" }, (p.selos || []).map((s, i) => h("span", { class: `rounded-full px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wide ${i === 1 ? "bg-brand text-ink" : "bg-paper text-muted"}` }, s))),
       h("h2", { class: "mt-3 text-3xl font-extrabold leading-[1.05] tracking-tight md:text-4xl" }, p.nome, p.nome2 ? h("span", { class: "block text-brand-ink" }, p.nome2) : null),
-      p.descricao ? h("p", { class: "mt-3 text-[15px] leading-relaxed text-muted" }, p.descricao) : null,
+      p.descricao ? h("p", { class: "mt-3 text-base leading-relaxed text-muted" }, p.descricao) : null,
       g.valor ? h("div", { class: `mt-5 flex items-center gap-3 rounded-2xl p-3.5 ${g.destaque ? "bg-emerald-50 text-emerald-900" : "bg-brand-soft text-ink"}` },
         h("span", { class: `grid size-10 shrink-0 place-items-center rounded-full ${g.destaque ? "bg-emerald-600 text-white" : "bg-brand text-ink"}` }, icon("shield", "size-5")),
         h("div", {}, h("p", { class: "text-[11px] font-bold uppercase tracking-wider opacity-70" }, g.rotulo || "Garantia"), h("p", { class: "text-lg font-extrabold leading-tight" }, g.valor))) : null,
       chipsTam,
       (p.destaques || []).length ? h("ul", { class: "mt-6 grid gap-4 sm:grid-cols-2" }, p.destaques.map((d) => h("li", { class: "flex gap-3" },
         h("span", { class: "mt-0.5 grid size-6 shrink-0 place-items-center rounded-full bg-brand-soft text-brand-ink" }, icon("check", "size-3.5")),
-        h("div", {}, h("p", { class: "text-[15px] font-bold leading-snug" }, d.t), h("p", { class: "text-sm leading-snug text-muted" }, d.d))))) : null,
+        h("div", {}, h("p", { class: "text-base font-bold leading-snug" }, d.t), h("p", { class: "text-[15px] leading-snug text-muted" }, d.d))))) : null,
       (p.specs || []).length ? h("details", { open: true, class: "group mt-6 overflow-hidden rounded-2xl ring-1 ring-line" },
-        h("summary", { class: "flex min-h-14 cursor-pointer list-none items-center justify-between px-4 text-sm font-extrabold uppercase tracking-wider [&::-webkit-details-marker]:hidden" },
+        h("summary", { class: "flex min-h-14 cursor-pointer list-none items-center justify-between px-4 text-[15px] font-extrabold uppercase tracking-wider [&::-webkit-details-marker]:hidden" },
           "Especificações técnicas", h("span", { class: "transition group-open:rotate-180" }, icon("down", "size-5"))),
-        h("dl", {}, p.specs.map((s) => h("div", { class: "flex justify-between gap-4 border-t border-line px-4 py-3 text-sm" },
-          h("dt", { class: "text-muted" }, s[0]), h("dd", { class: "text-right font-bold" }, s[1]))))) : null),
+        h("dl", {}, p.specs.map((s) => h("div", { class: "flex flex-col gap-0.5 border-t border-line px-4 py-3 sm:flex-row sm:justify-between sm:gap-4" },
+          h("dt", { class: "text-[15px] text-muted" }, s[0]), h("dd", { class: "text-base font-bold sm:text-right" }, s[1]))))) : null),
     h("div", { class: "sticky bottom-0 z-10 mt-auto flex items-center gap-2 border-t border-line bg-white/95 p-3 pb-[max(.75rem,env(safe-area-inset-bottom))] backdrop-blur md:px-8" },
-      zap || h("p", { class: "flex-1 px-2 text-sm text-muted" }, "Fale com a loja para pedir este produto."),
-      h("button", { type: "button", "aria-label": "Compartilhar", onclick: partilhar, class: "grid size-14 shrink-0 place-items-center rounded-full border border-line bg-white transition hover:bg-paper active:scale-95" }, icon("share", "size-5")),
-      admin ? h("button", { type: "button", "aria-label": "Editar", onclick: () => { dlg.close(); editarProduto(p.id); }, class: "grid size-14 shrink-0 place-items-center rounded-full border border-line bg-white transition hover:bg-paper" }, icon("pencil", "size-5")) : null));
+      zap || h("p", { class: "flex-1 px-2 text-sm text-muted" }, "Fale com a loja para pedir este produto.")));
 
+  const topo = h("div", { class: "sticky top-0 z-20 h-0" },
+    h("div", { "data-handle": "", "aria-hidden": "true", class: "absolute left-0 right-36 top-0 grid h-11 touch-none place-items-center md:hidden" },
+      h("span", { class: "h-1.5 w-10 rounded-full bg-black/30 ring-1 ring-white/60" })),
+    h("button", { type: "button", "data-fechar": "", "aria-label": "Fechar", class: C.close + " absolute right-3 top-3" }, icon("x", "size-5")),
+    h("button", { type: "button", "aria-label": "Compartilhar", onclick: partilhar, class: C.close + " absolute right-16 top-3" }, icon("share", "size-5")),
+    admin ? h("button", { type: "button", "aria-label": "Editar", onclick: () => { dlg.close(); editarProduto(p.id); }, class: C.close + " absolute right-28 top-3" }, icon("pencil", "size-5")) : null);
   dlg.replaceChildren(
-    h("div", { class: "sticky top-0 z-20 h-0" }, h("button", { type: "button", "data-fechar": "", "aria-label": "Fechar", class: C.close + " absolute right-3 top-3" }, icon("x", "size-5"))),
+    topo,
     h("div", { class: "flex flex-col md:h-full md:flex-row" }, galeria(p), direita));
+  ativarArraste(dlg, $("[data-handle]", topo));
   dlg.scrollTop = 0;
   dlg.showModal();
   if (!semHistorico) history.pushState({ p: id }, "", "#produto/" + id);
+}
+
+/* arrastar a alça para baixo fecha a folha (gesto nativo) */
+function ativarArraste(dlg, zona) {
+  let y0 = null, dy = 0, t0 = 0;
+  zona.addEventListener("pointerdown", (e) => { y0 = e.clientY; dy = 0; t0 = e.timeStamp; zona.setPointerCapture(e.pointerId); dlg.style.transition = "none"; });
+  zona.addEventListener("pointermove", (e) => { if (y0 == null) return; dy = Math.max(0, e.clientY - y0); dlg.style.transform = `translateY(${dy}px)`; });
+  const fim = (e) => {
+    if (y0 == null) return;
+    const v = dy / Math.max(1, e.timeStamp - t0);
+    dlg.style.transition = "transform .2s ease";
+    if (dy > 120 || v > 0.6) {
+      dlg.style.transform = "translateY(100%)";
+      setTimeout(() => { dlg.close(); dlg.style.transform = ""; dlg.style.transition = ""; }, 180);
+    } else { dlg.style.transform = ""; setTimeout(() => { dlg.style.transition = ""; }, 220); }
+    y0 = null;
+  };
+  zona.addEventListener("pointerup", fim);
+  zona.addEventListener("pointercancel", fim);
 }
 
 /* fecha diálogos: botão × e clique fora; histórico acompanha o produto aberto */
