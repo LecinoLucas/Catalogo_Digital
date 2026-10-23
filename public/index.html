@@ -176,6 +176,8 @@ const C = {
   close: "grid size-11 place-items-center rounded-full bg-white/95 text-ink shadow-md ring-1 ring-black/5 backdrop-blur transition hover:bg-white active:scale-95",
 };
 
+const VERSAO = "v3";
+
 /* ===== estado ===== */
 let cat = null, admin = false, aba = null, busca = "", estatico = false, fechandoPorVoltar = false;
 
@@ -307,7 +309,7 @@ function render() {
   const ct = zaps().map((n) => h("a", { href: `https://wa.me/${n}`, target: "_blank", rel: "noopener", class: "flex min-h-11 items-center gap-2.5 hover:text-brand" }, icon("wa", "size-5"), fmtZap(n)));
   if (e.instagram) ct.push(h("a", { href: `https://instagram.com/${encodeURIComponent(e.instagram)}`, target: "_blank", rel: "noopener", class: "flex min-h-11 items-center gap-2.5 hover:text-brand" }, icon("insta", "size-5"), "@" + e.instagram));
   $("#contato").replaceChildren(...ct);
-  $("#copy").textContent = `© ${new Date().getFullYear()} ${e.nome || ""}`;
+  $("#copy").textContent = `© ${new Date().getFullYear()} ${e.nome || ""} · ${VERSAO}`;
   $("#login-x").replaceChildren(icon("x", "size-5"));
 
   const fab = zapButton({ label: LABEL_CTA, cls: "grid size-14 place-items-center rounded-full bg-wa text-white shadow-xl shadow-black/25 transition hover:bg-wa-dark active:scale-95", soIcone: true });

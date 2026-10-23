@@ -21,14 +21,18 @@ O `seed/` só é usado enquanto o KV estiver vazio.
 O visual usa Tailwind CSS v4, já compilado em `public/app.css` (arquivo que vai para o GitHub). Por isso a
 Cloudflare **não precisa de build**: deixe o *Build command* vazio e o *Output directory* como `public`.
 
+As ferramentas de desenvolvimento ficam na pasta `tools/`, de propósito: a raiz do projeto não tem
+`package.json`, então a Cloudflare não tenta instalar nada antes de publicar.
+
 Só rode isto se mudar classes ou o tema (`src/input.css` ou o HTML):
 
 ```
-npm install
-npm run css          # gera public/app.css
+npm --prefix tools ci          # uma vez
+npm --prefix tools run css     # gera public/app.css
 ```
 
-Depois faça o commit do `public/app.css` junto com a alteração.
+Depois faça o commit do `public/app.css` junto com a alteração. O número da versão aparece no rodapé do
+site (`VERSAO` no `public/index.html`); aumente quando publicar algo novo, para saber qual está no ar.
 
 ## Publicar na Cloudflare (grátis)
 
@@ -50,8 +54,8 @@ Para entrar: abra o site, clique em **Área restrita** (rodapé) e digite a senh
 ## Testar no computador
 
 ```
-npm install
-npm run dev        # http://localhost:8788  (senha de teste: teste123)
+npm --prefix tools ci
+npm --prefix tools run dev     # http://localhost:8788  (senha de teste: teste123)
 ```
 
 ## Usar sem backend (só arquivos estáticos)
